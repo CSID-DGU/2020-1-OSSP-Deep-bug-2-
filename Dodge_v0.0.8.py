@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-<<<<<<< HEAD
-# In[8]:
+# In[13]:
 
 
 #!/usr/bin/env python
 # coding: utf-8
-=======
-# In[1]:
->>>>>>> upstream/dohee857
 
 
 #-*- coding: utf-8 -*-
@@ -49,7 +45,6 @@ clock.tick(60)
 pygame.key.set_repeat(1,1)
 
 # 파일 경로 지정
-<<<<<<< HEAD
 #file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
@@ -57,15 +52,6 @@ file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝
 # Load the background image 
 background_image = pygame.image.load(file_path+"background.jpg").convert()
 pygame.display.set_caption("OSSP - DeepBug - Dodge v0.0.7")
-=======
-file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-#file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-#file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/"
-
-# Load the background image 
-background_image = pygame.image.load(file_path+"background.jpg").convert()
-pygame.display.set_caption("OSSP - DeepBug - Dodge v0.0.8")
->>>>>>> upstream/dohee857
 
 # 비행기 이미지
 playerImg = pygame.image.load(file_path+"spaceship.png")
@@ -123,7 +109,6 @@ class Player(object):
 
 # 비행기의 속도를 조절할 수 있는 요소
     def update(self):
-<<<<<<< HEAD
         if self.x_speed > 0:
             self.x_speed += self.speed_bonus
         elif self.x_speed < 0:
@@ -132,16 +117,6 @@ class Player(object):
             self.y_speed += self.speed_bonus
         elif self.y_speed < 0:
             self.y_speed -= self.speed_bonus
-=======
-        # if self.x_speed > 0:
-        #     self.x_speed += self.speed_bonus
-        # elif self.x_speed < 0:
-        #     self.x_speed -= self.speed_bonus
-        # if self.y_speed > 0:
-        #     self.y_speed += self.speed_bonus
-        # elif self.y_speed < 0:
-        #     self.y_speed -= self.speed_bonus
->>>>>>> upstream/dohee857
         self.x += self.x_speed
         self.y += self.y_speed
         #screen.blit(playerImg, (self.x, self.y))
@@ -169,7 +144,6 @@ class Player(object):
     def left_bound(self):
         if self.x <= 0:
             self.x = 0
-<<<<<<< HEAD
             self.x_speed = self.x_speed * -1
     def right_bound(self):
         if self.x > size[0] - self.width:
@@ -183,21 +157,6 @@ class Player(object):
         if self.y >= size[1] - self.height:
             self.y = size[1] - self.height
             self.y_speed = self.y_speed * -1
-=======
-            #self.x_speed = self.x_speed * -1
-    def right_bound(self):
-        if self.x > size[0] - self.width:
-            self.x = size[0] - self.width
-            #self.x_speed = self.x_speed * -1
-    def top_bound(self):
-        if self.y <= 0:
-            self.y = 0
-            #self.y_speed = self.y_speed * -1
-    def bottom_bound(self):
-        if self.y >= size[1] - self.height:
-            self.y = size[1] - self.height
-            #self.y_speed = self.y_speed * -1
->>>>>>> upstream/dohee857
 
     def bound(self):
         self.left_bound()
@@ -220,88 +179,35 @@ class Fireball(object):
     has_reached_limit = False #This will let us know if it can de-spawn
     side = 0
     col = 0
-<<<<<<< HEAD
     
-=======
-    direction = 0
-
->>>>>>> upstream/dohee857
     # 암석 스폰 위치&색
     def __init__(self):
         self.side = random.randint(1,4)
         # 1 - left # 2 - top # 3 - right # 4 - bottom
         self.col = random.randint(1,8)
         # 1 - white # 2 - red # 3 - puple # 4 - green # 5 - whitebig # 6 - redbig # 7 - pupplebig # 8 - greenbig
-<<<<<<< HEAD
-=======
-        self.direction = random.randint(1,4)
->>>>>>> upstream/dohee857
 
         # 왼쪽에서 스폰. 위아래는 랜덤출력. 운석의 속도는 10으로 고정
         # 그 밑에도 출력되는 방향만 다르고 나머진 동일
         if self.side == 1:
             self.x = -60 # get to the left of the window
             self.y = random.randint(0, size[1]-self.height)
-<<<<<<< HEAD
             self.x_speed = 5
-=======
-            if self.direction == 2:
-                self.x_speed = 1.4142135623731*5/2
-                self.y_speed = -1.4142135623731*5/2
-            elif self.direction == 4:
-                self.x_speed = 1.4142135623731*5/2
-                self.y_speed = 1.4142135623731*5/2
-            else:
-                self.x_speed = 5
->>>>>>> upstream/dohee857
 
         elif self.side == 2:
             self.x = random.randint(0, size[0]-self.width)
             self.y = -60
-<<<<<<< HEAD
             self.y_speed = 5
-=======
-            if self.direction == 1:
-                self.x_speed = -1.4142135623731*5/2
-                self.y_speed = 1.4142135623731*5/2
-            elif self.direction == 3:
-                self.x_speed = 1.4142135623731*5/2
-                self.y_speed = 1.4142135623731*5/2
-            else:
-                self.y_speed = 5
->>>>>>> upstream/dohee857
 
         elif self.side == 3:
             self.x = size[0] + 60
             self.y = random.randint(0, size[1]-self.height)
-<<<<<<< HEAD
             self.x_speed = -5
-=======
-            if self.direction == 2:
-                self.x_speed = -1.4142135623731*5/2
-                self.y_speed = -1.4142135623731*5/2
-            elif self.direction == 4:
-                self.x_speed = -1.4142135623731*5/2
-                self.y_speed = 1.4142135623731*5/2
-            else:
-                self.x_speed = -5
->>>>>>> upstream/dohee857
 
         elif self.side == 4:
             self.x = random.randint(0, size[0]-self.width)
             self.y = size[1] + 60
-<<<<<<< HEAD
             self.y_speed = -5
-=======
-            if self.direction == 1:
-                self.x_speed = -1.4142135623731*5/2
-                self.y_speed = -1.4142135623731*5/2
-            elif self.direction == 3:
-                self.x_speed = 1.4142135623731*5/2
-                self.y_speed = -1.4142135623731*5/2
-            else:
-                self.y_speed = -5
->>>>>>> upstream/dohee857
             
     #암석 움직이는 파트 - 속도조절
     def update(self):
@@ -368,11 +274,7 @@ def game_loop():
             highscore = f.read()
     ##
 
-<<<<<<< HEAD
     default_font = pygame.font.SysFont('Gill Sans', 28)
-=======
-    default_font = pygame.font.SysFont('Monospace', 28)
->>>>>>> upstream/dohee857
     screen.blit(background_image, [0, 0])
 
     player.update()
@@ -412,8 +314,8 @@ def game_loop():
                     speed = 1
 
         screen.blit(background_image, [0, 0])
-        draw_text('Score : {}'.format(score),default_font,screen,80,20,yellow)
-        draw_text("High Score : "+str(highscore),default_font,screen,400,20,yellow)
+        draw_text('Score : {}'.format(score),default_font,screen,80,20,white)
+        draw_text("High Score : "+str(highscore),default_font,screen,400,20,white)
         player.bound()
         player.update()
 
@@ -480,11 +382,7 @@ def game_loop():
                 fireballs.pop(index)
                 score += 1
                 difficulty += 0.1
-<<<<<<< HEAD
                 player.speed_bonus += 0.01
-=======
-                player.speed_bonus += 0.5
->>>>>>> upstream/dohee857
 
                 print (score)
                 print (player.speed_bonus)
@@ -519,11 +417,7 @@ def game_loop2():
     with open(file_path+"highscore_2P.txt", "r") as f :
         highscore = f.read()
 
-<<<<<<< HEAD
     default_font = pygame.font.SysFont('Gill Sans', 28)
-=======
-    default_font = pygame.font.SysFont('Monospace', 28)
->>>>>>> upstream/dohee857
     screen.blit(background_image, [0, 0])
 
     player.update()
@@ -577,8 +471,8 @@ def game_loop2():
 
 
         screen.blit(background_image, [0, 0])
-        draw_text('Score : {}'.format(score),default_font,screen,80,20,yellow)
-        draw_text("High Score : "+str(highscore),default_font,screen,400,20,yellow)
+        draw_text('Score : {}'.format(score),default_font,screen,80,20,white)
+        draw_text("High Score : "+str(highscore),default_font,screen,400,20,white)
         player.bound()
         player_2.bound()
         player.update()
@@ -650,13 +544,6 @@ def message_display(text):
 # 1p 모드 선택창
 def select_type():
     screen.blit(intro_image, [0, 0])
-<<<<<<< HEAD
-=======
-    screen.blit(type1_big, [285, 90])
-    screen.blit(type2_big, [395, 90])
-    screen.blit(type3_big, [285, 290])
-    screen.blit(type4_big, [395, 290])
->>>>>>> upstream/dohee857
 
     pygame.mixer.music.load(file_path+"intro.wav")
     pygame.mixer.music.play(-1)
@@ -673,32 +560,20 @@ def select_type():
             button("Type 2",405,200,95,50,green,black,start_game1_2)
             button("Type 3",300,400,95,50,green,black,start_game1_3)
             button("Type 4",405,400,95,50,green,black,start_game1_4)
-<<<<<<< HEAD
             button_img(type1_big,285,90,120,120,start_game1_1)
             button_img(type2_big,395,90,120,120,start_game1_2)
             button_img(type3_big,285,290,120,120,start_game1_3)
             button_img(type4_big,395,290,120,120,start_game1_4)
             
 
-=======
->>>>>>> upstream/dohee857
 
         pygame.display.update()
 
 # 2p모드 선택창
 def select_type2():
     screen.blit(intro_image, [0, 0])
-<<<<<<< HEAD
 
     select_font = pygame.font.SysFont('Gill Sans', 40)
-=======
-    screen.blit(type1_big, [285, 90])
-    screen.blit(type2_big, [395, 90])
-    screen.blit(type3_big, [285, 290])
-    screen.blit(type4_big, [395, 290])
-
-    select_font = pygame.font.SysFont('Monospace', 40)
->>>>>>> upstream/dohee857
     if choose == 1:
         draw_text('1P choose',select_font,screen,400,50,white)
     elif choose == 2:
@@ -719,13 +594,10 @@ def select_type2():
             button("Type 2",405,200,95,50,green,black,start_game2_2)
             button("Type 3",300,400,95,50,green,black,start_game2_3)
             button("Type 4",405,400,95,50,green,black,start_game2_4)
-<<<<<<< HEAD
             button_img(type1_big,285,90,120,120,start_game2_1)
             button_img(type2_big,395,90,120,120,start_game2_2)
             button_img(type3_big,285,290,120,120,start_game2_3)
             button_img(type4_big,395,290,120,120,start_game2_4)
-=======
->>>>>>> upstream/dohee857
 
         pygame.display.update()
 
@@ -791,13 +663,6 @@ def start_game2_4():
 
 def select_ranking():
     screen.blit(intro_image, [0, 0])
-<<<<<<< HEAD
-=======
-    screen.blit(type1_big, [285, 90])
-    screen.blit(type2_big, [395, 90])
-    screen.blit(type3_big, [285, 290])
-    screen.blit(type4_big, [395, 290])
->>>>>>> upstream/dohee857
 
     pygame.mixer.music.load(file_path+"intro.wav")
     pygame.mixer.music.play(-1)
@@ -814,13 +679,10 @@ def select_ranking():
             button("Tpye 2",405,200,95,50,green,black,show_ranking2)
             button("Type 3",300,400,95,50,green,black,show_ranking3)
             button("Type 4",405,400,95,50,green,black,show_ranking4)
-<<<<<<< HEAD
             button_img(type1_big,285,90,120,120,show_ranking1)
             button_img(type2_big,395,90,120,120,show_ranking2)
             button_img(type3_big,285,290,120,120,show_ranking3)
             button_img(type4_big,395,290,120,120,show_ranking4)
-=======
->>>>>>> upstream/dohee857
 
         pygame.display.update()
 
@@ -829,11 +691,7 @@ def show_ranking1():
     pygame.mixer.music.load(file_path+"intro.wav")
     pygame.mixer.music.play(-1)
     
-<<<<<<< HEAD
     default_font = pygame.font.SysFont('Gill Sans', 28)
-=======
-    default_font = pygame.font.SysFont('Monospace', 28)
->>>>>>> upstream/dohee857
     f = open(file_path+"score_type1.txt")
     for i in range(20) :
         if i%2 == 1 :
@@ -854,11 +712,7 @@ def show_ranking1():
                 sys.exit()
 
             largeText = pygame.font.SysFont('Creepster-Regular.ttf', 100)
-<<<<<<< HEAD
             TextSurf, TextRect = text_objects("RANKING",   largeText)
-=======
-            TextSurf, TextRect = text_objects("Score Board",   largeText)
->>>>>>> upstream/dohee857
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
             
@@ -872,11 +726,7 @@ def show_ranking2():
     pygame.mixer.music.load(file_path+"intro.wav")
     pygame.mixer.music.play(-1)
     
-<<<<<<< HEAD
     default_font = pygame.font.SysFont('Gill Sans', 28)
-=======
-    default_font = pygame.font.SysFont('Monospace', 28)
->>>>>>> upstream/dohee857
     f = open(file_path+"score_type2.txt")
     for i in range(20) :
         if i%2 == 1 :
@@ -897,11 +747,7 @@ def show_ranking2():
                 sys.exit()
 
             largeText = pygame.font.SysFont('Creepster-Regular.ttf', 100)
-<<<<<<< HEAD
             TextSurf, TextRect = text_objects("RANKING",   largeText)
-=======
-            TextSurf, TextRect = text_objects("Score Board",   largeText)
->>>>>>> upstream/dohee857
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
             
@@ -916,11 +762,7 @@ def show_ranking3():
     pygame.mixer.music.load(file_path+"intro.wav")
     pygame.mixer.music.play(-1)
     
-<<<<<<< HEAD
     default_font = pygame.font.SysFont('Gill Sans', 28)
-=======
-    default_font = pygame.font.SysFont('Monospace', 28)
->>>>>>> upstream/dohee857
     f = open(file_path+"score_type3.txt")
     for i in range(20) :
         if i%2 == 1 :
@@ -941,11 +783,7 @@ def show_ranking3():
                 sys.exit()
 
             largeText = pygame.font.SysFont('Creepster-Regular.ttf', 100)
-<<<<<<< HEAD
             TextSurf, TextRect = text_objects("RANKING",   largeText)
-=======
-            TextSurf, TextRect = text_objects("Score Board",   largeText)
->>>>>>> upstream/dohee857
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
             
@@ -959,11 +797,7 @@ def show_ranking4():
     pygame.mixer.music.load(file_path+"intro.wav")
     pygame.mixer.music.play(-1)
     
-<<<<<<< HEAD
     default_font = pygame.font.SysFont('Gill Sans', 28)
-=======
-    default_font = pygame.font.SysFont('Monospace', 28)
->>>>>>> upstream/dohee857
     f = open(file_path+"score_type4.txt")
     for i in range(20) :
         if i%2 == 1 :
@@ -984,11 +818,7 @@ def show_ranking4():
                 sys.exit()
 
             largeText = pygame.font.SysFont('Creepster-Regular.ttf', 100)
-<<<<<<< HEAD
             TextSurf, TextRect = text_objects("RANKING",   largeText)
-=======
-            TextSurf, TextRect = text_objects("Score Board",   largeText)
->>>>>>> upstream/dohee857
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
             
@@ -1004,7 +834,6 @@ def quit_game():
 
 def menu():
     game_intro()
-<<<<<<< HEAD
     
 def button_img(img,x,y,w,h,action=None):
     mouse = pygame.mouse.get_pos()
@@ -1015,8 +844,6 @@ def button_img(img,x,y,w,h,action=None):
     if x+w > mouse[0] > x and y+h > mouse[1] > y:
         if click[0] == 1 and action != None:
            action()
-=======
->>>>>>> upstream/dohee857
 
 def button(msg,x,y,w,h,ic,ac,action=None):
     mouse = pygame.mouse.get_pos()
@@ -1028,11 +855,7 @@ def button(msg,x,y,w,h,ic,ac,action=None):
         if click[0] == 1 and action != None:
            action()
 
-<<<<<<< HEAD
     smallText = pygame.font.SysFont("Gill Sans MT", 40)
-=======
-    smallText = pygame.font.SysFont("monospace.ttf", 40)
->>>>>>> upstream/dohee857
     textSurf, textRect = text_objects(msg, smallText)
     textRect.center = ((x+(w/2)), (y+(h/2)))
     screen.blit(textSurf, textRect)
@@ -1074,11 +897,7 @@ def main_screen():
                 "Ready?",
                 "Watch out!",]
     message = messages[random.randint(0, len(messages) - 1)]
-<<<<<<< HEAD
     text = pygame.font.SysFont('Gill Sans', 60)
-=======
-    text = pygame.font.SysFont('Monospace', 60)
->>>>>>> upstream/dohee857
     text_on_screen = text.render(message, True, (255, 255, 255))
     text_rect = text_on_screen.get_rect()
     text_rect.center = ((size[0]/2),(size[1]/2))
@@ -1095,11 +914,7 @@ def main_screen():
 # 게임 오버 화면
 def death_screen(score):
     screen.fill((0,0,0))
-<<<<<<< HEAD
     text = pygame.font.SysFont('Gill Sans', 60)
-=======
-    text = pygame.font.SysFont('Monospace', 60)
->>>>>>> upstream/dohee857
     messages = ['Is it over yet?',
                 'Is that all?',
                 'Try harder...',]
@@ -1133,7 +948,7 @@ def dead():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                button("Restart",150,300,200,50,green,bright_green,select_type2)
+                button("Restart",150,300,200,50,green,bright_orange,select_type2)
                 button("Menu",450,300,200,50,green,bright_green,game_intro)
                 button("Quit",300,400,200,50,red,bright_red, quit_game)
             pygame.display.update()
@@ -1144,13 +959,19 @@ def dead():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                button("Restart",150,300,200,50,green,bright_green,select_type)
+                button("Restart",150,300,200,50,green,bright_orange,select_type)
                 button("Menu",450,300,200,50,green,bright_green,game_intro)
                 button("Quit",300,400,200,50,red,bright_red, quit_game)
             pygame.display.update()
 
 # 프로그램 시작
 game_intro()
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
