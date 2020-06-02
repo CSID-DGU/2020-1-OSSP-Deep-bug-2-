@@ -16,6 +16,8 @@ import sys
 from pygame.locals import *
 from os import path
 import datetime
+import pandas as pd
+import csv
 
 
 pygame.init()
@@ -46,8 +48,8 @@ pygame.key.set_repeat(1,1)
 
 # 파일 경로 지정
 #file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-#file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+#file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 
 # Load the background image 
 background_image = pygame.image.load(file_path+"background.jpg").convert()
@@ -396,7 +398,7 @@ def game_loop():
 
         screen.blit(background_image, [0, 0])
         draw_text('Score : {}'.format(score),default_font,screen,80,20,yellow)
-        draw_text("High Score : "+str(highscore),default_font,screen,600,20,yellow)
+        draw_text("High Score : "+str(highscore),default_font,screen,680,20,yellow)
         draw_text("level : "+str(int(difficulty)),default_font,screen,380,20,yellow)
 
         player.bound()
@@ -417,41 +419,33 @@ def game_loop():
                 
                 # 랭킹 갱신 #############
                 if p_img == 1:
-                    with open(file_path+"score_type1.txt","a") as v :
-                        v.writelines(str(score))
-                        v.write('\n')
-                        v.writelines(DateAndTime)
-                        v.write('\n')
+                    with open(file_path+"score_type1.csv","a",newline='') as file1 :
+                        writer = csv.writer(file1)
+                        writer.writerow((score,DateAndTime))
                     if score > int(highscore) :
                         highscore = score
                     with open(file_path+"highscore_type1.txt", "w") as f :
                         f.write(str(highscore))
                 elif p_img == 2:
-                    with open(file_path+"score_type2.txt","a") as v :
-                        v.writelines(str(score))
-                        v.write('\n')
-                        v.writelines(DateAndTime)
-                        v.write('\n')
+                    with open(file_path+"score_type2.csv","a",newline='') as file2 :
+                        writer = csv.writer(file2)
+                        writer.writerow((score,DateAndTime))
                     if score > int(highscore) :
                         highscore = score
                     with open(file_path+"highscore_type2.txt", "w") as f :
                         f.write(str(highscore))
                 elif p_img == 3:
-                    with open(file_path+"score_type3.txt","a") as v :
-                        v.writelines(str(score))
-                        v.write('\n')
-                        v.writelines(DateAndTime)
-                        v.write('\n')
+                    with open(file_path+"score_type3.csv","a",newline='') as file3 :
+                        writer = csv.writer(file3)
+                        writer.writerow((score,DateAndTime))
                     if score > int(highscore) :
                         highscore = score
                     with open(file_path+"highscore_type3.txt", "w") as f :
                         f.write(str(highscore))
                 elif p_img == 4:
-                    with open(file_path+"score_type4.txt","a") as v :
-                        v.writelines(str(score))
-                        v.write('\n')
-                        v.writelines(DateAndTime)
-                        v.write('\n')
+                    with open(file_path+"score_type4.csv","a",newline='') as file4 :
+                        writer = csv.writer(file4)
+                        writer.writerow((score,DateAndTime))
                     if score > int(highscore) :
                         highscore = score
                     with open(file_path+"highscore_type4.txt", "w") as f :
@@ -554,9 +548,9 @@ def game_loop2():
                     speed = 1
 
 
-        screen.blit(background_image, [0, 0]
+        screen.blit(background_image, [0, 0])
         draw_text('Score : {}'.format(score),default_font,screen,80,20,yellow)
-        draw_text("High Score : "+str(highscore),default_font,screen,600,20,yellow)
+        draw_text("High Score : "+str(highscore),default_font,screen,680,20,yellow)
         draw_text("level : "+str(int(difficulty)),default_font,screen,380,20,yellow)
 
         player.bound()
@@ -582,11 +576,9 @@ def game_loop2():
             if player.death == 1 & player_2.death == 1:
 
                #랭킹 갱신
-                with open(file_path+"score_2P.txt","a") as v :
-                    v.writelines(str(score))
-                    v.write('\n')
-                    v.writelines(DateAndTime)
-                    v.write('\n')
+                with open(file_path+"score_2P.csv","a",newline='') as file2P :
+                    writer = csv.writer(file2P)
+                    writer.writerow((score,DateAndTime))
                 if score > int(highscore) :
                     highscore = score
                 with open(file_path+"highscore_2P.txt", "w") as f :
@@ -804,6 +796,7 @@ def select_ranking():
             button("Tpye 2",405,200,95,50,green,black,show_ranking2)
             button("Type 3",300,400,95,50,green,black,show_ranking3)
             button("Type 4",405,400,95,50,green,black,show_ranking4)
+            button("2P RANKING",310,480,180,50,green,black,show_ranking2P)
             button_img(type1_big,285,90,120,120,show_ranking1)
             button_img(type2_big,395,90,120,120,show_ranking2)
             button_img(type3_big,285,290,120,120,show_ranking3)
@@ -815,19 +808,21 @@ def show_ranking1():
     screen.blit(intro_image, [0, 0])
     pygame.mixer.music.load(file_path+"intro.wav")
     pygame.mixer.music.play(-1)
-    
     default_font = pygame.font.SysFont('Gill Sans', 28)
+    f = pd.read_csv(file_path+"score_type1.csv")
+    f.columns=['score','time']
+    f = f.sort_values(["score"],ascending=[False])
+    f.to_csv(file_path+"score_type1.txt",index=False,header=None,sep="\n")
     f = open(file_path+"score_type1.txt")
     for i in range(20) :
-        if i%2 == 1 :
-            timing = f.readline()
-            timing = timing.rstrip()
-            draw_text(timing,default_font,screen,300,160+30+15*i,white)
-        elif i%2 == 0 :
+        if i%2 == 0 :
             scoring = f.readline()
             scoring = scoring.rstrip()
-            draw_text("Score:"+scoring,default_font,screen,590,160+30+15*(i+1),white)
-
+            draw_text("Score :"+scoring,default_font,screen,250,160+30+15*(i+1),white)
+        elif i%2 == 1 :
+            timing = f.readline()
+            timing = timing.rstrip()
+            draw_text(timing,default_font,screen,500,160+30+15*i,white)
     rank = True
     while rank:
         for event in pygame.event.get():
@@ -836,7 +831,7 @@ def show_ranking1():
                 pygame.quit()
                 sys.exit()
 
-            largeText = pygame.font.SysFont('Creepster-Regular.ttf', 100)
+            largeText = pygame.font.SysFont('Creepster-Regular.ttf', 90)
             TextSurf, TextRect = text_objects("RANKING",   largeText)
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
@@ -850,19 +845,21 @@ def show_ranking2():
     screen.blit(intro_image, [0, 0])
     pygame.mixer.music.load(file_path+"intro.wav")
     pygame.mixer.music.play(-1)
-    
     default_font = pygame.font.SysFont('Gill Sans', 28)
+    f = pd.read_csv(file_path+"score_type2.csv")
+    f.columns=['score','time']
+    f = f.sort_values(["score"],ascending=[False])
+    f.to_csv(file_path+"score_type2.txt",index=False,header=None,sep="\n")
     f = open(file_path+"score_type2.txt")
     for i in range(20) :
-        if i%2 == 1 :
-            timing = f.readline()
-            timing = timing.rstrip()
-            draw_text(timing,default_font,screen,300,160+30+15*i,white)
-        elif i%2 == 0 :
+        if i%2 == 0 :
             scoring = f.readline()
             scoring = scoring.rstrip()
-            draw_text("Score:"+scoring,default_font,screen,590,160+30+15*(i+1),white)
-
+            draw_text("Score :"+scoring,default_font,screen,250,160+30+15*(i+1),white)
+        elif i%2 == 1 :
+            timing = f.readline()
+            timing = timing.rstrip()
+            draw_text(timing,default_font,screen,500,160+30+15*i,white)
     rank = True
     while rank:
         for event in pygame.event.get():
@@ -871,7 +868,7 @@ def show_ranking2():
                 pygame.quit()
                 sys.exit()
 
-            largeText = pygame.font.SysFont('Creepster-Regular.ttf', 100)
+            largeText = pygame.font.SysFont('Creepster-Regular.ttf', 90)
             TextSurf, TextRect = text_objects("RANKING",   largeText)
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
@@ -886,19 +883,21 @@ def show_ranking3():
     screen.blit(intro_image, [0, 0])
     pygame.mixer.music.load(file_path+"intro.wav")
     pygame.mixer.music.play(-1)
-    
     default_font = pygame.font.SysFont('Gill Sans', 28)
+    f = pd.read_csv(file_path+"score_type3.csv")
+    f.columns=['score','time']
+    f = f.sort_values(["score"],ascending=[False])
+    f.to_csv(file_path+"score_type3.txt",index=False,header=None,sep="\n")
     f = open(file_path+"score_type3.txt")
     for i in range(20) :
-        if i%2 == 1 :
-            timing = f.readline()
-            timing = timing.rstrip()
-            draw_text(timing,default_font,screen,300,160+30+15*i,white)
-        elif i%2 == 0 :
+        if i%2 == 0 :
             scoring = f.readline()
             scoring = scoring.rstrip()
-            draw_text("Score:"+scoring,default_font,screen,590,160+30+15*(i+1),white)
-
+            draw_text("Score :"+scoring,default_font,screen,250,160+30+15*(i+1),white)
+        elif i%2 == 1 :
+            timing = f.readline()
+            timing = timing.rstrip()
+            draw_text(timing,default_font,screen,500,160+30+15*i,white)
     rank = True
     while rank:
         for event in pygame.event.get():
@@ -907,7 +906,7 @@ def show_ranking3():
                 pygame.quit()
                 sys.exit()
 
-            largeText = pygame.font.SysFont('Creepster-Regular.ttf', 100)
+            largeText = pygame.font.SysFont('Creepster-Regular.ttf', 90)
             TextSurf, TextRect = text_objects("RANKING",   largeText)
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
@@ -917,32 +916,33 @@ def show_ranking3():
             button("Quit",505,500,95,50,red,bright_red, quit_game)
 
         pygame.display.update()
+
 def show_ranking4():
     screen.blit(intro_image, [0, 0])
     pygame.mixer.music.load(file_path+"intro.wav")
     pygame.mixer.music.play(-1)
-    
     default_font = pygame.font.SysFont('Gill Sans', 28)
+    f = pd.read_csv(file_path+"score_type4.csv")
+    f.columns=['score','time']
+    f = f.sort_values(["score"],ascending=[False])
+    f.to_csv(file_path+"score_type4.txt",index=False,header=None,sep="\n")
     f = open(file_path+"score_type4.txt")
     for i in range(20) :
-        if i%2 == 1 :
-            timing = f.readline()
-            timing = timing.rstrip()
-            draw_text(timing,default_font,screen,300,160+30+15*i,white)
-        elif i%2 == 0 :
+        if i%2 == 0 :
             scoring = f.readline()
             scoring = scoring.rstrip()
-            draw_text("Score:"+scoring,default_font,screen,590,160+30+15*(i+1),white)
-
+            draw_text("Score :"+scoring,default_font,screen,250,160+30+15*(i+1),white)
+        elif i%2 == 1 :
+            timing = f.readline()
+            timing = timing.rstrip()
+            draw_text(timing,default_font,screen,500,160+30+15*i,white)
     rank = True
     while rank:
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
-            largeText = pygame.font.SysFont('Creepster-Regular.ttf', 100)
+            largeText = pygame.font.SysFont('Gill Sans', 90)
             TextSurf, TextRect = text_objects("RANKING",   largeText)
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
@@ -950,7 +950,41 @@ def show_ranking4():
             button("Menu",250,500,95,50,green,bright_green,game_intro)
             button("Ranking",350,500,150,50,orange,bright_orange,select_ranking)
             button("Quit",505,500,95,50,red,bright_red, quit_game)
+        pygame.display.update()
 
+def show_ranking2P():
+    screen.blit(intro_image, [0, 0])
+    pygame.mixer.music.load(file_path+"intro.wav")
+    pygame.mixer.music.play(-1)
+    default_font = pygame.font.SysFont('Gill Sans', 28)
+    f = pd.read_csv(file_path+"score_2P.csv")
+    f.columns=['score','time']
+    f = f.sort_values(["score"],ascending=[False])
+    f.to_csv(file_path+"score_2P.txt",index=False,header=None,sep="\n")
+    f = open(file_path+"score_2P.txt")
+    for i in range(20) :
+        if i%2 == 0 :
+            scoring = f.readline()
+            scoring = scoring.rstrip()
+            draw_text("Score :"+scoring,default_font,screen,250,160+30+15*(i+1),white)
+        elif i%2 == 1 :
+            timing = f.readline()
+            timing = timing.rstrip()
+            draw_text(timing,default_font,screen,500,160+30+15*i,white)
+    rank = True
+    while rank:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            largeText = pygame.font.SysFont('Gill Sans', 90)
+            TextSurf, TextRect = text_objects("RANKING",   largeText)
+            TextRect.center = ((size[0]/2),(size[1]/(4.5)))
+            screen.blit(TextSurf, TextRect)
+            
+            button("Menu",250,500,95,50,green,bright_green,game_intro)
+            button("Ranking",350,500,150,50,orange,bright_orange,select_ranking)
+            button("Quit",505,500,95,50,red,bright_red, quit_game)
         pygame.display.update()
 
 def quit_game():
