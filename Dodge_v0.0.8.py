@@ -97,6 +97,8 @@ class Player(object):
     width = 40
     height = 40
     mode = 0
+    death = 0
+    re_time = 5000
 
     def __init__(self, x, y, mode):
         self.x = x
@@ -105,6 +107,7 @@ class Player(object):
 
 # 비행기의 속도를 조절할 수 있는 요소
     def update(self):
+        if self.death == 0:
         # if self.x_speed > 0:
         #     self.x_speed += self.speed_bonus
         # elif self.x_speed < 0:
@@ -113,28 +116,28 @@ class Player(object):
         #     self.y_speed += self.speed_bonus
         # elif self.y_speed < 0:
         #     self.y_speed -= self.speed_bonus
-        self.x += self.x_speed
-        self.y += self.y_speed
+            self.x += self.x_speed
+            self.y += self.y_speed
         #screen.blit(playerImg, (self.x, self.y))
-        global p_img, p_img2
-        if self.mode == 1:
-            if p_img == 1:
-                screen.blit(playerimg1, (self.x, self.y))
-            elif p_img == 2:
-                screen.blit(playerimg2, (self.x, self.y))
-            elif p_img == 3:
-                screen.blit(playerimg3, (self.x, self.y))
-            elif p_img == 4:
-                screen.blit(playerimg4, (self.x, self.y))
-        elif self.mode == 2:
-            if p_img2 == 1:
-                screen.blit(playerimg1, (self.x, self.y))
-            elif p_img2 == 2:
-                screen.blit(playerimg2, (self.x, self.y))
-            elif p_img2 == 3:
-                screen.blit(playerimg3, (self.x, self.y))
-            elif p_img2 == 4:
-                screen.blit(playerimg4, (self.x, self.y))
+            global p_img, p_img2
+            if self.mode == 1:
+                if p_img == 1:
+                   screen.blit(playerimg1, (self.x, self.y))
+                elif p_img == 2:
+                    screen.blit(playerimg2, (self.x, self.y))
+                elif p_img == 3:
+                    screen.blit(playerimg3, (self.x, self.y))
+                elif p_img == 4:
+                    screen.blit(playerimg4, (self.x, self.y))
+            elif self.mode == 2:
+                if p_img2 == 1:
+                    screen.blit(playerimg1, (self.x, self.y))
+                elif p_img2 == 2:
+                    screen.blit(playerimg2, (self.x, self.y))
+                elif p_img2 == 3:
+                    screen.blit(playerimg3, (self.x, self.y))
+                elif p_img2 == 4:
+                    screen.blit(playerimg4, (self.x, self.y))
 
 # 비행기위 위치를 업데이트 하는 과정
     def left_bound(self):
@@ -514,7 +517,13 @@ def game_loop2():
         for index, fireball in enumerate(fireballs):
             fireball.update()
 
-            if fireball.rectangle().colliderect(player.rectangle()) or fireball.rectangle().colliderect(player_2.rectangle()):
+            if fireball.rectangle().colliderect(player.rectangle()):
+                player.death = 1      
+            elif fireball.rectangle().colliderect(player_2.rectangle()):
+                player_2.death = 1
+
+            if player.death == 1 & player_2.death == 1:
+
                #랭킹 갱신
                 with open(file_path+"score_2P.txt","a") as v :
                     v.writelines(str(score))
@@ -526,10 +535,43 @@ def game_loop2():
                 with open(file_path+"highscore_2P.txt", "w") as f :
                     f.write(str(highscore))
 
-
                 pygame.mixer.Sound.play(explosion_sound)
                 pygame.mixer.music.stop()
                 death_screen(score)
+
+            elif player.death == 1:
+                screen.blit(playerImg, (player.x, player.y))
+                if (player.x-20 <= player_2.x <= player.x+20) and (player.y-20 <= player_2.y <= player.y+20):
+                    player.death = 0
+                # meet = 0
+                # if (player.x-50 <= player_2.x <= player.x+50) and (player.y-50 <= player_2.y <= player.y+50):
+                #     meet = 1
+                #     start_time = pygame.time.get_ticks()
+                #     last_time = 0
+                #     if not (player.x-50 <= player_2.x <= player.x+50) and not (player.y-50 <= player_2.y <= player.y+50):
+                #         meet = 0
+                # if meet == 1:
+                #     last_time = pygame.time.get_ticks()
+                #     player.re_time = player.re_time - (pygame.time.get_ticks() - start_time)    
+                # if player.re_time <= 0:
+                #     player.death = 0
+                #
+                # last_time_image = small_font.render('남은 시간 {}'.format(player.re_time), True, yellow)
+                # screen.blit(last_time_image, (player.x, player.y))
+
+
+            elif player_2.death == 1:
+                screen.blit(playerImg, (player_2.x, player_2.y))
+                if (player_2.x-20 <= player.x <= player_2.x+20) and (player_2.y-20 <= player.y <= player_2.y+20):
+                    player_2.death = 0
+
+                # while player_2.x-50 <= player.x <= player_2.x+50 and player_2.y-50 <= player.y <= player_2.y+50:
+                #     player_2.re_time -= (pygame.time.get_ticks() - start_time)
+                #     continue
+                # if player_2.re_time <= 0:
+                #     player_2.death = 0
+                #     # player_2.bound()
+                #     # player_2.update()          
 
             if fireball.has_reached_limit:
                 fireballs.pop(index)
