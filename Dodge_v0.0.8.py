@@ -67,6 +67,7 @@ type3_big = pygame.image.load(file_path+"type3_big.png")
 type4_big = pygame.image.load(file_path+"type4_big.png")
 
 # 운석 이미지
+fireball = pygame.image.load(file_path+"meteor.png")
 fireball_w = pygame.image.load(file_path+"meteor_w.png")
 fireball_r = pygame.image.load(file_path+"meteor_r.png")
 fireball_p = pygame.image.load(file_path+"meteor_p.png")
@@ -174,6 +175,58 @@ class Player(object):
 
 #운석 속도는 레벨에 따라 점점 빨라지게
 # 아이템 먹으면 빨라지거나 느려짐
+
+# object 나오는곳, 방향 정하는 함수
+def side_direc(self):
+        if self.side == 1:
+            self.x = -60 # get to the left of the window
+            self.y = random.randint(0, size[1]-self.height)
+            if self.direction == 2:
+                self.x_speed = 1.4142135623731*5/2
+                self.y_speed = -1.4142135623731*5/2
+            elif self.direction == 4:
+                self.x_speed = 1.4142135623731*5/2
+                self.y_speed = 1.4142135623731*5/2
+            else:
+                self.x_speed = 5
+
+        elif self.side == 2:
+            self.x = random.randint(0, size[0]-self.width)
+            self.y = -60
+            if self.direction == 1:
+                self.x_speed = -1.4142135623731*5/2
+                self.y_speed = 1.4142135623731*5/2
+            elif self.direction == 3:
+                self.x_speed = 1.4142135623731*5/2
+                self.y_speed = 1.4142135623731*5/2
+            else:
+                self.y_speed = 5
+
+        elif self.side == 3:
+            self.x = size[0] + 60
+            self.y = random.randint(0, size[1]-self.height)
+            if self.direction == 2:
+                self.x_speed = -1.4142135623731*5/2
+                self.y_speed = -1.4142135623731*5/2
+            elif self.direction == 4:
+                self.x_speed = -1.4142135623731*5/2
+                self.y_speed = 1.4142135623731*5/2
+            else:
+                self.x_speed = -5
+
+        elif self.side == 4:
+            self.x = random.randint(0, size[0]-self.width)
+            self.y = size[1] + 60
+            if self.direction == 1:
+                self.x_speed = -1.4142135623731*5/2
+                self.y_speed = -1.4142135623731*5/2
+            elif self.direction == 3:
+                self.x_speed = 1.4142135623731*5/2
+                self.y_speed = -1.4142135623731*5/2
+            else:
+                self.y_speed = -5
+
+
 class Fireball(object):
     x = 0
     y = 0
@@ -184,35 +237,17 @@ class Fireball(object):
     has_reached_limit = False #This will let us know if it can de-spawn
     side = 0
     col = 0
-    
+    direction = 0
+
     # 암석 스폰 위치&색
     def __init__(self):
         self.side = random.randint(1,4)
         # 1 - left # 2 - top # 3 - right # 4 - bottom
         self.col = random.randint(1,8)
         # 1 - white # 2 - red # 3 - puple # 4 - green # 5 - whitebig # 6 - redbig # 7 - pupplebig # 8 - greenbig
+        self.direction = random.randint(1,4)
 
-        # 왼쪽에서 스폰. 위아래는 랜덤출력. 운석의 속도는 10으로 고정
-        # 그 밑에도 출력되는 방향만 다르고 나머진 동일
-        if self.side == 1:
-            self.x = -60 # get to the left of the window
-            self.y = random.randint(0, size[1]-self.height)
-            self.x_speed = 5
-
-        elif self.side == 2:
-            self.x = random.randint(0, size[0]-self.width)
-            self.y = -60
-            self.y_speed = 5
-
-        elif self.side == 3:
-            self.x = size[0] + 60
-            self.y = random.randint(0, size[1]-self.height)
-            self.x_speed = -5
-
-        elif self.side == 4:
-            self.x = random.randint(0, size[0]-self.width)
-            self.y = size[1] + 60
-            self.y_speed = -5
+        side_direc(self)
             
     #암석 움직이는 파트 - 속도조절
     def update(self):
@@ -234,8 +269,8 @@ class Fireball(object):
         elif self.col == 7:
             screen.blit(fireball_p_big, (self.x, self.y))
         elif self.col == 8:
-            screen.blit(fireball_g_big, (self.x, self.y))
-
+            screen.blit(fireball_g_big, (self.x, self.y)) 
+        
         if self.side == 1 and self.x > size[0]:
             self.has_reached_limit = True
         if self.side == 2 and self.y > size[1]:
@@ -243,7 +278,48 @@ class Fireball(object):
         if self.side == 3 and self.x < -40:
             self.has_reached_limit = True
         if self.side == 4 and self.y < -40:
-            self.has_reached_limit = True
+            self.has_reached_limit = True  
+        
+
+    def rectangle(self):
+        return pygame.Rect(self.x, self.y, self.width, self.height)
+
+class Item1(object):
+    x = 0
+    y = 0
+    x_speed = 0
+    y_speed = 0
+    width = 40
+    height = 40
+    side = 0
+    direction = 0
+    start_time = 0 
+
+    def __init__(self):
+        self.side = random.randint(1,4)
+        self.direction = random.randint(1,4)
+        self.start_time = pygame.time.get_ticks()
+
+        side_direc(self)
+
+    def update(self):
+        self.x += self.x_speed
+        self.y += self.y_speed
+
+        screen.blit(fireball, (self.x, self.y))
+
+        if self.x <= 0:
+            self.x = 0
+            self.x_speed = self.x_speed * -1
+        if self.x > size[0] - self.width:
+            self.x = size[0] - self.width
+            self.x_speed = self.x_speed * -1
+        if self.y <= 0:
+            self.y = 0
+            self.y_speed = self.y_speed * -1
+        if self.y >= size[1] - self.height:
+            self.y = size[1] - self.height
+            self.y_speed = self.y_speed * -1
 
     def rectangle(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
@@ -319,8 +395,10 @@ def game_loop():
                     speed = 1
 
         screen.blit(background_image, [0, 0])
-        draw_text('Score : {}'.format(score),default_font,screen,80,20,white)
-        draw_text("High Score : "+str(highscore),default_font,screen,400,20,white)
+        draw_text('Score : {}'.format(score),default_font,screen,80,20,yellow)
+        draw_text("High Score : "+str(highscore),default_font,screen,600,20,yellow)
+        draw_text("level : "+str(int(difficulty)),default_font,screen,380,20,yellow)
+
         player.bound()
         player.update()
 
@@ -391,6 +469,7 @@ def game_loop():
 
                 print (score)
                 print (player.speed_bonus)
+                print (difficulty)
 
         pygame.display.update()
         if speed == 2:
@@ -475,9 +554,11 @@ def game_loop2():
                     speed = 1
 
 
-        screen.blit(background_image, [0, 0])
-        draw_text('Score : {}'.format(score),default_font,screen,80,20,white)
-        draw_text("High Score : "+str(highscore),default_font,screen,400,20,white)
+        screen.blit(background_image, [0, 0]
+        draw_text('Score : {}'.format(score),default_font,screen,80,20,yellow)
+        draw_text("High Score : "+str(highscore),default_font,screen,600,20,yellow)
+        draw_text("level : "+str(int(difficulty)),default_font,screen,380,20,yellow)
+
         player.bound()
         player_2.bound()
         player.update()
