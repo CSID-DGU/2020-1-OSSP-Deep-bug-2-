@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[13]:
+# In[2]:
+
 
 
 #!/usr/bin/env python
@@ -18,11 +19,10 @@ from os import path
 import datetime
 import pandas as pd
 import csv
+from time import sleep
 
 
 pygame.init()
-
-
 # 게임 화면 크기 지정
 size = (800, 600)
 screen = pygame.display.set_mode(size)
@@ -35,6 +35,7 @@ red = (200,0,0)
 green = (0,200,0)
 orange = (255,127,0)
 grey = (50,50,50)
+blue = (0,0,225)
 bright_red = (255,0,0)
 bright_green = (0,255,0)
 bright_orange = (255,215,0)
@@ -48,8 +49,8 @@ pygame.key.set_repeat(1,1)
 
 # 파일 경로 지정
 #file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-#file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+#file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 
 # Load the background image 
 background_image = pygame.image.load(file_path+"background.jpg").convert()
@@ -92,6 +93,45 @@ def draw_text(text,font,surface,x,y,main_color) :
     text_rect.centerx = x
     text_rect.centery = y
     surface.blit(text_obj,text_rect)
+
+#########일시정지 함수
+def paused() :
+    pause = True
+    while pause :
+        for event in pygame.event.get() :
+            if event.type == pygame.QUIT :
+                pygame.quit()
+        transp_surf = pygame.Surface(size)
+        transp_surf.set_alpha(1)
+        screen.blit(transp_surf,transp_surf.get_rect())
+        largeText = pygame.font.Font('freesansbold.ttf',100)
+        TextSurf, TextRect = text_objects("PAUSED",largeText)
+        TextRect.center = ((size[0]/2),(size[1]/3))
+        screen.blit(TextSurf, TextRect)
+        button("Restart",150,450,140,40,green,black,game_loop)
+        button("Menu",360,450,100,40,green,black,game_intro)
+        button("Quit",530,450,100,40,green,black,quit_game)
+        pygame.display.update()
+        clock.tick(15)
+
+def paused2() :
+    pause = True
+    while pause :
+        for event in pygame.event.get() :
+            if event.type == pygame.QUIT :
+                pygame.quit()
+        transp_surf = pygame.Surface(size)
+        transp_surf.set_alpha(1)
+        screen.blit(transp_surf,transp_surf.get_rect())
+        largeText = pygame.font.Font('freesansbold.ttf',100)
+        TextSurf, TextRect = text_objects("PAUSED",largeText)
+        TextRect.center = ((size[0]/2),(size[1]/3))
+        screen.blit(TextSurf, TextRect)
+        button("Restart",150,450,140,40,green,black,game_loop2)
+        button("Menu",360,450,100,40,green,black,game_intro)
+        button("Quit",530,450,100,40,green,black,quit_game)
+        pygame.display.update()
+        clock.tick(15)
 
 # 비행기 크기는 다르게 설정함. 크기에 따라 움직임이는 방법이 달라짐
 # 비행기 속도는 일정, 아이템 먹을때만 빨라지거나 느려짐
@@ -331,6 +371,7 @@ def game_loop():
     pygame.mixer.music.load(file_path+"whilegame.wav")
     pygame.mixer.music.play(-1)
 
+    global pause
     global explosion_sound
     explosion_sound=pygame.mixer.Sound(file_path+"explosion.wav")
 
@@ -383,6 +424,9 @@ def game_loop():
                     player.y_speed = -2
                 if event.key == pygame.K_SPACE:
                     speed = 2
+                if event.key == pygame.K_p :
+                    pause = True
+                    paused()
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
@@ -520,6 +564,9 @@ def game_loop2():
                     player_2.y_speed = 2
                 if event.key == pygame.K_UP:
                     player_2.y_speed = -2
+                if event.key == pygame.K_p :
+                    pause = True
+                    paused2()
 
                 if event.key == pygame.K_d:
                     player.x_speed = 2
@@ -645,7 +692,7 @@ def message_display(text):
        largeText = pygame.font.Font('Creepster-Regular.ttf',115)
        TextSurf, TextRect = text_objects(text, largeText)
        TextRect.center = ((size[0]/2),(size[1]/3))
-       gameDisplay.blit(TextSurf, TextRect,)
+       gameDisplay.blit(TextSurf, TextRect)
 
 def text_objects(text, font):
        textSurface = font.render(text, True, (white))
@@ -655,7 +702,7 @@ def message_display(text):
        largeText = pygame.font.Font('Creepster-Regular.ttf',115)
        TextSurf, TextRect = text_objects(text, largeText)
        TextRect.center = ((size[0]/2),(size[1]/3))
-       gameDisplay.blit(TextSurf, TextRect,)
+       gameDisplay.blit(TextSurf, TextRect)
 
 ## 게임 매뉴 구성 부분
 # 1p 모드 선택창
@@ -673,14 +720,14 @@ def select_type():
                 pygame.quit()
                 sys.exit()
 
-            button("Type 1",300,200,95,50,green,black,start_game1_1)
-            button("Type 2",405,200,95,50,green,black,start_game1_2)
-            button("Type 3",300,400,95,50,green,black,start_game1_3)
-            button("Type 4",405,400,95,50,green,black,start_game1_4)
-            button_img(type1_big,285,90,120,120,start_game1_1)
-            button_img(type2_big,395,90,120,120,start_game1_2)
-            button_img(type3_big,285,290,120,120,start_game1_3)
-            button_img(type4_big,395,290,120,120,start_game1_4)
+            button("Type 1",275,250,95,50,green,black,start_game1_1)
+            button("Type 2",430,250,95,50,green,black,start_game1_2)
+            button("Type 3",275,450,95,50,green,black,start_game1_3)
+            button("Type 4",430,450,95,50,green,black,start_game1_4)
+            button_img(type1_big,260,140,120,120,start_game1_1)
+            button_img(type2_big,415,140,120,120,start_game1_2)
+            button_img(type3_big,260,340,120,120,start_game1_3)
+            button_img(type4_big,415,340,120,120,start_game1_4)
             
 
 
@@ -692,9 +739,9 @@ def select_type2():
 
     select_font = pygame.font.SysFont('Gill Sans', 40)
     if choose == 1:
-        draw_text('1P choose',select_font,screen,400,50,white)
+        draw_text('1P choose',select_font,screen,400,100,white)
     elif choose == 2:
-        draw_text('2P choose',select_font,screen,400,50,white)
+        draw_text('2P choose',select_font,screen,400,100,white)
 
     pygame.mixer.music.load(file_path+"intro.wav")
     pygame.mixer.music.play(-1)
@@ -707,14 +754,14 @@ def select_type2():
                 pygame.quit()
                 sys.exit()
 
-            button("Type 1",300,200,95,50,green,black,start_game2_1)
-            button("Type 2",405,200,95,50,green,black,start_game2_2)
-            button("Type 3",300,400,95,50,green,black,start_game2_3)
-            button("Type 4",405,400,95,50,green,black,start_game2_4)
-            button_img(type1_big,285,90,120,120,start_game2_1)
-            button_img(type2_big,395,90,120,120,start_game2_2)
-            button_img(type3_big,285,290,120,120,start_game2_3)
-            button_img(type4_big,395,290,120,120,start_game2_4)
+            button("Type 1",275,250,95,50,green,black,start_game2_1)
+            button("Type 2",430,250,95,50,green,black,start_game2_2)
+            button("Type 3",275,450,95,50,green,black,start_game2_3)
+            button("Type 4",430,450,95,50,green,black,start_game2_4)
+            button_img(type1_big,260,140,120,120,start_game2_1)
+            button_img(type2_big,415,140,120,120,start_game2_2)
+            button_img(type3_big,260,340,120,120,start_game2_3)
+            button_img(type4_big,415,340,120,120,start_game2_4)
 
         pygame.display.update()
 
@@ -792,15 +839,15 @@ def select_ranking():
                 pygame.quit()
                 sys.exit()
 
-            button("Type 1",300,200,95,50,green,black,show_ranking1)
-            button("Tpye 2",405,200,95,50,green,black,show_ranking2)
-            button("Type 3",300,400,95,50,green,black,show_ranking3)
-            button("Type 4",405,400,95,50,green,black,show_ranking4)
+            button("Type 1",275,200,95,50,green,black,show_ranking1)
+            button("Tpye 2",430,200,95,50,green,black,show_ranking2)
+            button("Type 3",275,400,95,50,green,black,show_ranking3)
+            button("Type 4",430,400,95,50,green,black,show_ranking4)
             button("2P RANKING",310,480,180,50,green,black,show_ranking2P)
-            button_img(type1_big,285,90,120,120,show_ranking1)
-            button_img(type2_big,395,90,120,120,show_ranking2)
-            button_img(type3_big,285,290,120,120,show_ranking3)
-            button_img(type4_big,395,290,120,120,show_ranking4)
+            button_img(type1_big,260,90,120,120,show_ranking1)
+            button_img(type2_big,420,90,120,120,show_ranking2)
+            button_img(type3_big,260,290,120,120,show_ranking3)
+            button_img(type4_big,420,290,120,120,show_ranking4)
 
         pygame.display.update()
 
@@ -836,9 +883,9 @@ def show_ranking1():
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
             
-            button("Menu",250,500,95,50,green,bright_green,game_intro)
-            button("Ranking",350,500,150,50,orange,bright_orange,select_ranking)
-            button("Quit",505,500,95,50,red,bright_red, quit_game)
+            button("Menu",225,500,95,50,green,bright_green,game_intro)
+            button("Ranking",325,500,150,50,orange,bright_orange,select_ranking)
+            button("Quit",480,500,95,50,red,bright_red, quit_game)
 
         pygame.display.update()
 def show_ranking2():
@@ -873,9 +920,9 @@ def show_ranking2():
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
             
-            button("Menu",250,500,95,50,green,bright_green,game_intro)
-            button("Ranking",350,500,150,50,orange,bright_orange,select_ranking)
-            button("Quit",505,500,95,50,red,bright_red, quit_game)
+            button("Menu",225,500,95,50,green,bright_green,game_intro)
+            button("Ranking",325,500,150,50,orange,bright_orange,select_ranking)
+            button("Quit",480,500,95,50,red,bright_red, quit_game)
 
         pygame.display.update()
 
@@ -911,9 +958,9 @@ def show_ranking3():
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
             
-            button("Menu",250,500,95,50,green,bright_green,game_intro)
-            button("Ranking",350,500,150,50,orange,bright_orange,select_ranking)
-            button("Quit",505,500,95,50,red,bright_red, quit_game)
+            button("Menu",225,500,95,50,green,bright_green,game_intro)
+            button("Ranking",325,500,150,50,orange,bright_orange,select_ranking)
+            button("Quit",480,500,95,50,red,bright_red, quit_game)
 
         pygame.display.update()
 
@@ -947,9 +994,9 @@ def show_ranking4():
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
             
-            button("Menu",250,500,95,50,green,bright_green,game_intro)
-            button("Ranking",350,500,150,50,orange,bright_orange,select_ranking)
-            button("Quit",505,500,95,50,red,bright_red, quit_game)
+            button("Menu",225,500,95,50,green,bright_green,game_intro)
+            button("Ranking",325,500,150,50,orange,bright_orange,select_ranking)
+            button("Quit",480,500,95,50,red,bright_red, quit_game)
         pygame.display.update()
 
 def show_ranking2P():
@@ -982,9 +1029,9 @@ def show_ranking2P():
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
             
-            button("Menu",250,500,95,50,green,bright_green,game_intro)
-            button("Ranking",350,500,150,50,orange,bright_orange,select_ranking)
-            button("Quit",505,500,95,50,red,bright_red, quit_game)
+            button("Menu",225,500,95,50,green,bright_green,game_intro)
+            button("Ranking",325,500,150,50,orange,bright_orange,select_ranking)
+            button("Quit",480,500,95,50,red,bright_red, quit_game)
         pygame.display.update()
 
 def quit_game():
@@ -1038,11 +1085,11 @@ def game_intro():
 
             largeText = pygame.font.SysFont('Creepster-Regular.ttf', 100)
             TextSurf, TextRect = text_objects("Select Menu",   largeText)
-            TextRect.center = ((size[0]/2),(size[1]/3))
+            TextRect.center = ((size[0]/2),(size[1]/4))
             screen.blit(TextSurf, TextRect)
 
-            button("1 Play",300,300,95,50,green,bright_green,select_type)
-            button("2 Play",405,300,95,50,green,bright_green,select_type2)
+            button("1 Play",300,230,200,50,green,blue,select_type)
+            button("2 Play",300,300,200,50,green,bright_green,select_type2)
             button("Ranking",300,370,200,50,orange,bright_orange,select_ranking)
             button("Quit",300,440,200,50,red,bright_red, quit_game)
 
@@ -1125,6 +1172,7 @@ def dead():
 
 # 프로그램 시작
 game_intro()
+
 
 
 # In[ ]:
