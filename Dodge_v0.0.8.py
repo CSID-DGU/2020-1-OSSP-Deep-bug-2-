@@ -19,6 +19,8 @@ import datetime
 import pandas as pd
 import csv
 
+from datetime import timedelta
+
 
 pygame.init()
 
@@ -47,13 +49,13 @@ clock.tick(60)
 pygame.key.set_repeat(1,1)
 
 # 파일 경로 지정
-#file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+#file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 
 # Load the background image 
 background_image = pygame.image.load(file_path+"background.jpg").convert()
-pygame.display.set_caption("OSSP - DeepBug - Dodge v0.0.7")
+pygame.display.set_caption("OSSP - DeepBug - Dodge v0.0.8")
 
 # 비행기 이미지
 playerImg = pygame.image.load(file_path+"spaceship.png")
@@ -295,7 +297,8 @@ class Item1(object):
     height = 40
     side = 0
     direction = 0
-    start_time = 0 
+    start_time = 0
+    use = 0
 
     def __init__(self):
         self.side = random.randint(1,4)
@@ -325,6 +328,12 @@ class Item1(object):
 
     def rectangle(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
+    
+    def set_use(self):
+        self.use
+
+    def __del__(self):
+        print (" item1 소멸 ")
 
 # 게임진행
 def game_loop():
@@ -365,6 +374,12 @@ def game_loop():
 
     speed = 1
 
+    p_s = 2
+    item1 = []
+    #global start_time, last_time
+    start_time = datetime.datetime.now()
+    last_time = 0
+
     alive = True
     while alive:
         for event in pygame.event.get():
@@ -374,13 +389,13 @@ def game_loop():
             # 스페이스바로 게임 속도 조절 추가                
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                    player.x_speed = 2
+                    player.x_speed = p_s
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                    player.x_speed = -2
+                    player.x_speed = -p_s
                 if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                    player.y_speed = 2
+                    player.y_speed = p_s
                 if event.key == pygame.K_UP or event.key == pygame.K_w:
-                    player.y_speed = -2
+                    player.y_speed = -p_s
                 if event.key == pygame.K_SPACE:
                     speed = 2
 
@@ -403,6 +418,24 @@ def game_loop():
 
         player.bound()
         player.update()
+
+        if difficulty == 2.0:
+            item1.append(Item1())
+
+        for index, item in enumerate(item1):
+            item.update()    
+
+            if item.rectangle().colliderect(player.rectangle()):
+                start_time = datetime.datetime.now()
+                p_s = 4
+                item1.pop(index)
+
+            last_time = datetime.datetime.now()
+            #last_time = pygame.time.get_ticks()
+
+            if timedelta(seconds=2) <= (last_time - start_time):
+                p_s = 2
+                
 
         ###
         now= datetime.datetime.now()
