@@ -14,7 +14,7 @@ import pygame
 import random
 import time
 import sys
-from pygame.locals import *
+#from pygame.locals import *
 from os import path
 import datetime
 import pandas as pd
@@ -49,12 +49,13 @@ pygame.key.set_repeat(1,1)
 
 # 파일 경로 지정
 #file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+#file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+file_path = "/home/wj/OSSP/Dodge-game/"
 
 # Load the background image 
 background_image = pygame.image.load(file_path+"background.jpg").convert()
-pygame.display.set_caption("OSSP - DeepBug - Dodge v0.0.7")
+pygame.display.set_caption("OSSP - DeepBug - Dodge v0.0.9")
 
 # 비행기 이미지
 playerImg = pygame.image.load(file_path+"spaceship.png")
