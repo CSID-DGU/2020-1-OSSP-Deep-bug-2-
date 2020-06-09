@@ -82,6 +82,9 @@ fireball_r_big = pygame.image.load(file_path+"meteor_r_big.png")
 fireball_p_big = pygame.image.load(file_path+"meteor_p_big.png")
 fireball_g_big = pygame.image.load(file_path+"meteor_g_big.png")
 
+#아이템 이미지
+item1 = pygame.image.load(file_path+"item1.png")
+
 
 # 인트로 배경 이미지
 intro_image = pygame.image.load(file_path+"intro_image.jpg")
@@ -104,10 +107,10 @@ def paused() :
             if event.type == pygame.QUIT :
                 pygame.quit()
             if event.type == pygame.KEYDOWN :
-                if event.key == pygame.K_c :
-                    pause = False
-                elif event.key == pygame.K_q :
+                if event.key == pygame.K_q :
                     pygame.quit()
+                elif event.key == pygame.K_c :
+                    pause = False
                      
         transp_surf = pygame.Surface(size)
         transp_surf.set_alpha(1)
@@ -313,6 +316,7 @@ class Fireball(object):
     def update(self):
         self.x += self.x_speed
         self.y += self.y_speed
+
         # 운석 색상 다양화
         if self.col == 1:
             screen.blit(fireball_w, (self.x, self.y))
@@ -338,8 +342,7 @@ class Fireball(object):
         if self.side == 3 and self.x < -40:
             self.has_reached_limit = True
         if self.side == 4 and self.y < -40:
-            self.has_reached_limit = True  
-        
+            self.has_reached_limit = True
 
     def rectangle(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
@@ -351,6 +354,7 @@ class Item1(object):
     y_speed = 0
     width = 40
     height = 40
+    has_reached_limit = False
     side = 0
     direction = 0
     start_time = 0 
@@ -366,7 +370,7 @@ class Item1(object):
         self.x += self.x_speed
         self.y += self.y_speed
 
-        screen.blit(fireball, (self.x, self.y))
+        screen.blit(item1, (self.x, self.y))
 
         if self.x <= 0:
             self.x = 0
@@ -380,6 +384,15 @@ class Item1(object):
         if self.y >= size[1] - self.height:
             self.y = size[1] - self.height
             self.y_speed = self.y_speed * -1
+
+        if self.side == 1 and self.x > size[0]:
+            self.has_reached_limit = True
+        if self.side == 2 and self.y > size[1]:
+            self.has_reached_limit = True
+        if self.side == 3 and self.x < -40:
+            self.has_reached_limit = True
+        if self.side == 4 and self.y < -40:
+            self.has_reached_limit = True  
 
     def rectangle(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
@@ -442,12 +455,9 @@ def game_loop():
                     player.y_speed = -2
                 if event.key == pygame.K_SPACE:
                     speed = 2
-                if event.key == pygame.K_c :
-                    alive = False
                 if event.key == pygame.K_p :
                     pause = True
                     paused()
-
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
@@ -482,7 +492,7 @@ def game_loop():
 
             if fireball.rectangle().colliderect(player.rectangle()):
                 
-                # 랭킹 갱신 #############
+            # 랭킹 갱신 #############
                 if p_img == 1:
                     with open(file_path+"score_type1.csv","a",newline='') as file1 :
                         writer = csv.writer(file1)
@@ -496,7 +506,7 @@ def game_loop():
                         writer = csv.writer(file2)
                         writer.writerow((score,DateAndTime))
                     if score > int(highscore) :
-                        highscore = score
+                        highscore = score                        
                     with open(file_path+"highscore_type2.txt", "w") as f :
                         f.write(str(highscore))
                 elif p_img == 3:
@@ -526,11 +536,8 @@ def game_loop():
                 difficulty += 0.1
                 player.speed_bonus += 0.01
 
-                print (score)
-                print (player.speed_bonus)
-                print (difficulty)
-
         pygame.display.update()
+
         if speed == 2:
             clock.tick(120)
         elif speed == 1:
@@ -585,8 +592,6 @@ def game_loop2():
                     player_2.y_speed = 2
                 if event.key == pygame.K_UP:
                     player_2.y_speed = -2
-                if event.key == pygame.K_c :
-                    alive = False
                 if event.key == pygame.K_p :
                     pause = True
                     paused2()
@@ -698,7 +703,6 @@ def game_loop2():
                 difficulty += 0.1
                 player.speed_bonus += 0.01
                 player_2.speed_bonus += 0.01
-
 
         pygame.display.update()
         if speed == 2:
