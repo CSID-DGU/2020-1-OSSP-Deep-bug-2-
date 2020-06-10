@@ -76,7 +76,7 @@ type3_big = pygame.image.load(file_path+"type3_big.png")
 type4_big = pygame.image.load(file_path+"type4_big.png")
 
 # 운석
-fireball = pygame.image.load(file_path+"meteor.png")
+fireball = pygame.image.load(file_path+"item.png")
 fireball_w = pygame.image.load(file_path+"meteor_w.png")
 fireball_r = pygame.image.load(file_path+"meteor_r.png")
 fireball_p = pygame.image.load(file_path+"meteor_p.png")
