@@ -49,9 +49,9 @@ clock.tick(60)
 pygame.key.set_repeat(1,1)
 
 ## 파일 경로 지정
-file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deep-bug-2/Dodge-game/"
+# file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deep-bug-2/Dodge-game/"
 #file_path = "/home/wj/OSSP/Dodge-game/"
-#file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 
 ## 이미지
@@ -123,10 +123,10 @@ def paused() :
             if event.type == pygame.QUIT :
                 pygame.quit()
             if event.type == pygame.KEYDOWN :
-                if event.key == pygame.K_c :
-                    pause = False
-                elif event.key == pygame.K_q :
+                if event.key == pygame.K_q :
                     pygame.quit()
+                elif event.key == pygame.K_c :
+                    pause = False
                      
         transp_surf = pygame.Surface(size)
         transp_surf.set_alpha(1)
@@ -432,8 +432,6 @@ def game_loop():
                     player.y_speed = -p_s
                 if event.key == pygame.K_SPACE:
                     speed = 2
-                if event.key == pygame.K_c :
-                    alive = False
                 if event.key == pygame.K_p :
                     pause = True
                     paused()
@@ -622,8 +620,6 @@ def game_loop2():
                     player_2.y_speed = p_s2
                 if event.key == pygame.K_UP:
                     player_2.y_speed = -p_s2
-                if event.key == pygame.K_c :
-                    alive = False
                 if event.key == pygame.K_p :
                     pause = True
                     paused()
