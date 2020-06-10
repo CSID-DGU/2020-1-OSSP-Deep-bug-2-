@@ -103,6 +103,12 @@ def paused() :
         for event in pygame.event.get() :
             if event.type == pygame.QUIT :
                 pygame.quit()
+            if event.type == pygame.KEYDOWN :
+                if event.key == pygame.K_c :
+                    pause = False
+                elif event.key == pygame.K_q :
+                    pygame.quit()
+                     
         transp_surf = pygame.Surface(size)
         transp_surf.set_alpha(1)
         screen.blit(transp_surf,transp_surf.get_rect())
@@ -110,9 +116,12 @@ def paused() :
         TextSurf, TextRect = text_objects("PAUSED",largeText)
         TextRect.center = ((size[0]/2),(size[1]/3))
         screen.blit(TextSurf, TextRect)
+        default_font = pygame.font.SysFont('Gill Sans', 30)
+        draw_text("Press 'c' to continue",default_font,screen,400,400,white)
         button("Restart",150,450,140,40,green,black,game_loop)
         button("Menu",360,450,100,40,green,black,game_intro)
         button("Quit",530,450,100,40,green,black,quit_game)
+
         pygame.display.update()
         clock.tick(15)
 
@@ -122,6 +131,11 @@ def paused2() :
         for event in pygame.event.get() :
             if event.type == pygame.QUIT :
                 pygame.quit()
+            if event.type == pygame.KEYDOWN :
+                if event.key == pygame.K_c :
+                    pause = False
+                elif event.key == pygame.K_q :
+                    pygame.quit()
         transp_surf = pygame.Surface(size)
         transp_surf.set_alpha(1)
         screen.blit(transp_surf,transp_surf.get_rect())
@@ -129,6 +143,8 @@ def paused2() :
         TextSurf, TextRect = text_objects("PAUSED",largeText)
         TextRect.center = ((size[0]/2),(size[1]/3))
         screen.blit(TextSurf, TextRect)
+        default_font = pygame.font.SysFont('Gill Sans', 30)
+        draw_text("Press 'c' to continue",default_font,screen,400,400,white)
         button("Restart",150,450,140,40,green,black,game_loop2)
         button("Menu",360,450,100,40,green,black,game_intro)
         button("Quit",530,450,100,40,green,black,quit_game)
@@ -426,9 +442,12 @@ def game_loop():
                     player.y_speed = -2
                 if event.key == pygame.K_SPACE:
                     speed = 2
+                if event.key == pygame.K_c :
+                    alive = False
                 if event.key == pygame.K_p :
                     pause = True
                     paused()
+
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
@@ -566,6 +585,8 @@ def game_loop2():
                     player_2.y_speed = 2
                 if event.key == pygame.K_UP:
                     player_2.y_speed = -2
+                if event.key == pygame.K_c :
+                    alive = False
                 if event.key == pygame.K_p :
                     pause = True
                     paused2()
