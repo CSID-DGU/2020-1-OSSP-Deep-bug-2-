@@ -379,6 +379,8 @@ def game_loop():
     global pause
     global explosion_sound
     explosion_sound=pygame.mixer.Sound(file_path+"explosion.wav")
+    global item_sound
+    item_sound=pygame.mixer.Sound(file_path+"item.wav")
 
     global score
     global highscore
@@ -436,7 +438,6 @@ def game_loop():
                     pause = True
                     paused()
 
-
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                     player.x_speed = 0
@@ -478,6 +479,7 @@ def game_loop():
             item1.update()
             
             if item1.rectangle().colliderect(player.rectangle()):
+                pygame.mixer.Sound.play(item_sound)
                 item1.exeist = 0
                 item1.useing = 1
                 item1.start_time = pygame.time.get_ticks()
@@ -488,6 +490,7 @@ def game_loop():
             item2.update()
         
             if item2.rectangle().colliderect(player.rectangle()):
+                pygame.mixer.Sound.play(item_sound)
                 item2.exist = 0
                 item2.useing = 1
                 score += len(fireballs)
@@ -547,10 +550,6 @@ def game_loop():
                 difficulty += 0.1
                 player.speed_bonus += 0.01
 
-                print (score)
-                print (player.speed_bonus)
-                print (difficulty)
-
         pygame.display.update()
 
         if speed == 2:
@@ -572,6 +571,8 @@ def game_loop2():
 
     global explosion_sound
     explosion_sound=pygame.mixer.Sound(file_path+"explosion.wav")
+    global item_sound
+    item_sound=pygame.mixer.Sound(file_path+"item.wav")
 
     global score
     global highscore
@@ -679,6 +680,7 @@ def game_loop2():
         if item1.exist == 1 and item1.useing == 0:
             item1.update()
             
+
             if player.death == 0 and item1.rectangle().colliderect(player.rectangle()):
                 item1.exeist = 0
                 item1.useing = 1
@@ -694,7 +696,7 @@ def game_loop2():
         ## 아이템 2
         if item2.exist == 1 and item2.useing == 0:
             item2.update()
-        
+
             if (player.death == 0 and item2.rectangle().colliderect(player.rectangle())) or (player_2.death == 0 and item2.rectangle().colliderect(player_2.rectangle())):
                 item2.exist = 0
                 item2.useing = 1
