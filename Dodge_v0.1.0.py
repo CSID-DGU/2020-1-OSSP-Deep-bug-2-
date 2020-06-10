@@ -18,7 +18,6 @@ from os import path
 import datetime
 import pandas as pd
 import csv
-from time import sleep
 
 
 pygame.init()
@@ -58,7 +57,7 @@ file_path = "/home/wj/OSSP/Dodge-game/"
 # 배경, 인트로 
 background_image = pygame.image.load(file_path+"background.jpg").convert()
 intro_image = pygame.image.load(file_path+"intro_image.jpg").convert()
-pygame.display.set_caption("OSSP - DeepBug - Dodge v0.0.10")
+pygame.display.set_caption("OSSP - DeepBug - Dodge v0.1.0")
 
 # 비행기
 playerImg = pygame.image.load(file_path+"spaceship.png")
@@ -76,7 +75,7 @@ type3_big = pygame.image.load(file_path+"type3_big.png")
 type4_big = pygame.image.load(file_path+"type4_big.png")
 
 # 운석
-fireball = pygame.image.load(file_path+"meteor.png")
+fireball = pygame.image.load(file_path+"item.png")
 fireball_w = pygame.image.load(file_path+"meteor_w.png")
 fireball_r = pygame.image.load(file_path+"meteor_r.png")
 fireball_p = pygame.image.load(file_path+"meteor_p.png")
@@ -368,8 +367,9 @@ def game_loop():
     pygame.mixer.music.play(-1)
 
     global pause
-    global explosion_sound
+    global explosion_sound, item_sound
     explosion_sound=pygame.mixer.Sound(file_path+"explosion.wav")
+    item_sound=pygame.mixer.Sound(file_path+"item.wav")
 
     global score
     global highscore
@@ -378,7 +378,7 @@ def game_loop():
     player = Player(size[0]/2, size[1]/2, 1)
     fireballs = []
     difficulty = 1.0
-    item1 = Item1() # 비행기 7초간 이속증가 아이템
+    item1 = Item1() # 비행기 5초간 이속증가 아이템
     item2 = Item1() # 화면에 나온 운석 제거 아이템
     global p_s
     p_s = 2
@@ -447,12 +447,10 @@ def game_loop():
         player.bound()
         player.update()
 
-        ##
         now= datetime.datetime.now()
         DateAndTime = now.strftime('%Y-%m-%d %H:%M:%S')
-        ##
 
-       # 랜덤 아이템 생성
+       # 아이템 생성
         if round(difficulty,1) != 1:
             if round(difficulty,1)%2 == 0:
             # 아이템1 생성
@@ -547,7 +545,7 @@ def game_loop():
         ## 아이템 1
         if item1.useing == 1:
             now = pygame.time.get_ticks()
-            if int(now - item1.start_time) >= 7000:
+            if int(now - item1.start_time) >= 5000:
                 p_s = 2
 
         
@@ -556,8 +554,9 @@ def game_loop2():
     pygame.mixer.music.load(file_path+"whilegame.wav")
     pygame.mixer.music.play(-1)
 
-    global explosion_sound
+    global explosion_sound, item_sound
     explosion_sound=pygame.mixer.Sound(file_path+"explosion.wav")
+    item_sound=pygame.mixer.Sound(file_path+"item.wav")
 
     global score
     global highscore
@@ -570,7 +569,7 @@ def game_loop2():
     fireballs = []
     difficulty = 1.0
 
-    item1 = Item1() # 비행기 7초간 이속 3배 증가 아이템
+    item1 = Item1() # 비행기 5초간 이속 3배 증가 아이템
     item2 = Item1() # 화면에 나온 운석 제거 아이템
     
     global p_s1, p_s2
@@ -649,7 +648,7 @@ def game_loop2():
         now = datetime.datetime.now()
         DateAndTime = now.strftime('%Y-%m-%d %H:%M:%S')
 
-        # 랜덤 아이템 생성
+        # 아이템 생성
         if round(difficulty,1) != 1:
             if round(difficulty,1)%2 == 0:
             # 아이템1 생성
@@ -765,7 +764,7 @@ def game_loop2():
         ## 아이템 1
         if item1.useing == 1:
             now = pygame.time.get_ticks()
-            if int(now - item1.start_time) >= 7000:
+            if int(now - item1.start_time) >= 5000:
                 p_s1 = 2
                 p_s2 = 2
             item1 = Item1()
