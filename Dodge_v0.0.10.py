@@ -95,6 +95,26 @@ def draw_text(text,font,surface,x,y,main_color) :
     text_rect.centery = y
     surface.blit(text_obj,text_rect)
 
+def text_objects(text, font):
+       textSurface = font.render(text, True, (white))
+       return textSurface, textSurface.get_rect()
+
+def message_display(text):
+       largeText = pygame.font.Font('Creepster-Regular.ttf',115)
+       TextSurf, TextRect = text_objects(text, largeText)
+       TextRect.center = ((size[0]/2),(size[1]/3))
+       gameDisplay.blit(TextSurf, TextRect)
+
+def text_objects(text, font):
+       textSurface = font.render(text, True, (white))
+       return textSurface, textSurface.get_rect()
+
+def message_display(text):
+       largeText = pygame.font.Font('Creepster-Regular.ttf',115)
+       TextSurf, TextRect = text_objects(text, largeText)
+       TextRect.center = ((size[0]/2),(size[1]/3))
+       gameDisplay.blit(TextSurf, TextRect)
+
 ### 일시정지 함수
 def paused() :
     pause = True
@@ -444,15 +464,14 @@ def game_loop():
         DateAndTime = now.strftime('%Y-%m-%d %H:%M:%S')
         ##
 
-        # 랜덤 아이템 생성
-        if round(difficulty,1)%2 == 0:
-            rand = random.randint(0,1)
+       # 랜덤 아이템 생성
+        if round(difficulty,1) != 1:
+            if round(difficulty,1)%2 == 0:
             # 아이템1 생성
-            if rand == 0:
                 item1.exist = 1
                 item1.useing = 0
             # 아이템2 생성
-            elif rand == 1:
+            elif round(difficulty,1)%2 == 1:
                 item2.exist = 1
                 item2.useing = 0
 
@@ -548,8 +567,6 @@ def game_loop():
                 p_s = 2
 
         
-
-
 # 게임진행 2p일때
 def game_loop2():
     pygame.mixer.music.load(file_path+"whilegame.wav")
@@ -652,14 +669,13 @@ def game_loop2():
         DateAndTime = now.strftime('%Y-%m-%d %H:%M:%S')
 
         # 랜덤 아이템 생성
-        if score != 0 and score%10 == 0:
-            rand = int(str(now)[-1])
+        if round(difficulty,1) != 1:
+            if round(difficulty,1)%2 == 0:
             # 아이템1 생성
-            if rand == 0:
                 item1.exist = 1
                 item1.useing = 0
             # 아이템2 생성
-            elif rand == 1:
+            elif round(difficulty,1)%2 == 1:
                 item2.exist = 1
                 item2.useing = 0
 
@@ -683,8 +699,7 @@ def game_loop2():
         if item2.exist == 1 and item2.useing == 0:
             item2.update()
         
-            if (player.death == 0 and item2.rectangle().colliderect(player.rectangle()))
-             or (player_2.death == 0 and item2.rectangle().colliderect(player_2.rectangle())):
+            if (player.death == 0 and item2.rectangle().colliderect(player.rectangle())) or (player_2.death == 0 and item2.rectangle().colliderect(player_2.rectangle())):
                 item2.exist = 0
                 item2.useing = 1
                 score += len(fireballs)
@@ -776,26 +791,6 @@ def game_loop2():
             item1 = Item1()
 
 
-def text_objects(text, font):
-       textSurface = font.render(text, True, (white))
-       return textSurface, textSurface.get_rect()
-
-def message_display(text):
-       largeText = pygame.font.Font('Creepster-Regular.ttf',115)
-       TextSurf, TextRect = text_objects(text, largeText)
-       TextRect.center = ((size[0]/2),(size[1]/3))
-       gameDisplay.blit(TextSurf, TextRect)
-
-def text_objects(text, font):
-       textSurface = font.render(text, True, (white))
-       return textSurface, textSurface.get_rect()
-
-def message_display(text):
-       largeText = pygame.font.Font('Creepster-Regular.ttf',115)
-       TextSurf, TextRect = text_objects(text, largeText)
-       TextRect.center = ((size[0]/2),(size[1]/3))
-       gameDisplay.blit(TextSurf, TextRect)
-
 ## 게임 매뉴 구성 부분
 # 1p 모드 선택창
 def select_type():
@@ -821,8 +816,6 @@ def select_type():
             button_img(type3_big,260,340,120,120,start_game1_3)
             button_img(type4_big,415,340,120,120,start_game1_4)
             
-
-
         pygame.display.update()
 
 # 2p모드 선택창
@@ -980,6 +973,7 @@ def show_ranking1():
             button("Quit",480,500,95,50,red,bright_red, quit_game)
 
         pygame.display.update()
+
 def show_ranking2():
     screen.blit(intro_image, [0, 0])
     pygame.mixer.music.load(file_path+"intro.wav")
