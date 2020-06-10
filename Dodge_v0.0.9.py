@@ -49,8 +49,8 @@ pygame.key.set_repeat(1,1)
 
 # 파일 경로 지정
 #file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-#file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+#file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+file_path = "/home/dohee/Desktop/OSSP/Dodge-game/"
 
 # Load the background image 
 background_image = pygame.image.load(file_path+"background.jpg").convert()
