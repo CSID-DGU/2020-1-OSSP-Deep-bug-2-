@@ -22,11 +22,11 @@ from time import sleep
 
 
 pygame.init()
-# 게임 화면 크기 지정
+## 게임 화면 크기 지정
 size = (800, 600)
 screen = pygame.display.set_mode(size)
 
-# 컬러지정
+## 컬러지정
 yellow = (250, 250, 20)
 black = (0,0,0)
 white = (255,255,255)
@@ -39,23 +39,28 @@ bright_red = (255,0,0)
 bright_green = (0,255,0)
 bright_orange = (255,215,0)
 
-# 게임 속도(fps)지정
+display_color = (255, 255, 255)
+
+## 게임 속도(fps)지정
 clock = pygame.time.Clock()
 clock.tick(60)
 
-# 키보드 연속입력
+## 키보드 연속입력
 pygame.key.set_repeat(1,1)
 
-# 파일 경로 지정
+## 파일 경로 지정
 file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deep-bug-2/Dodge-game/"
+#file_path = "/home/wj/OSSP/Dodge-game/"
 #file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 
-# Load the background image 
+## 이미지
+# 배경, 인트로 
 background_image = pygame.image.load(file_path+"background.jpg").convert()
+intro_image = pygame.image.load(file_path+"intro_image.jpg").convert()
 pygame.display.set_caption("OSSP - DeepBug - Dodge v0.0.10")
 
-# 비행기 이미지
+# 비행기
 playerImg = pygame.image.load(file_path+"spaceship.png")
 playerimg1 = pygame.image.load(file_path+"type1.png")
 playerimg2 = pygame.image.load(file_path+"type2.png")
@@ -64,13 +69,13 @@ playerimg4 = pygame.image.load(file_path+"type4.png")
 # 출처 : https://pixabay.com/ko/vectors/%ED%8F%AD%EB%B0%9C-%EB%B2%84%EC%8A%A4%ED%8A%B8-147909/
 playerdead = pygame.image.load(file_path+"explosion.png")
 
-# 매뉴에 쓰는 비행기 이미지
+# 매뉴에 쓰는 비행기
 type1_big = pygame.image.load(file_path+"type1_big.png")
 type2_big = pygame.image.load(file_path+"type2_big.png")
 type3_big = pygame.image.load(file_path+"type3_big.png")
 type4_big = pygame.image.load(file_path+"type4_big.png")
 
-# 운석 이미지
+# 운석
 fireball = pygame.image.load(file_path+"meteor.png")
 fireball_w = pygame.image.load(file_path+"meteor_w.png")
 fireball_r = pygame.image.load(file_path+"meteor_r.png")
@@ -82,12 +87,7 @@ fireball_p_big = pygame.image.load(file_path+"meteor_p_big.png")
 fireball_g_big = pygame.image.load(file_path+"meteor_g_big.png")
 
 
-# 인트로 배경 이미지
-intro_image = pygame.image.load(file_path+"intro_image.jpg")
-
-display_color = (255, 255, 255)
-
-########게임 내에 text를 넣을때 쓰는 함수
+### 게임 내에 text를 넣을때 쓰는 함수
 def draw_text(text,font,surface,x,y,main_color) :
     text_obj = font.render(text,True,main_color)
     text_rect = text_obj.get_rect()
@@ -95,7 +95,7 @@ def draw_text(text,font,surface,x,y,main_color) :
     text_rect.centery = y
     surface.blit(text_obj,text_rect)
 
-#########일시정지 함수
+### 일시정지 함수
 def paused() :
     pause = True
     while pause :
@@ -117,41 +117,20 @@ def paused() :
         screen.blit(TextSurf, TextRect)
         default_font = pygame.font.SysFont('Gill Sans', 30)
         draw_text("Press 'c' to continue",default_font,screen,400,400,white)
-        button("Restart",150,450,140,40,green,black,game_loop)
-        button("Menu",360,450,100,40,green,black,game_intro)
-        button("Quit",530,450,100,40,green,black,quit_game)
-
+        if choose == 1:
+            button("Restart",150,450,140,40,green,black,game_loop)
+            button("Menu",360,450,100,40,green,black,game_intro)
+            button("Quit",530,450,100,40,green,black,quit_game)
+        elif choose == 2:
+            button("Restart",150,450,140,40,green,black,game_loop2)
+            button("Menu",360,450,100,40,green,black,game_intro)
+            button("Quit",530,450,100,40,green,black,quit_game)
         pygame.display.update()
         clock.tick(15)
 
-def paused2() :
-    pause = True
-    while pause :
-        for event in pygame.event.get() :
-            if event.type == pygame.QUIT :
-                pygame.quit()
-            if event.type == pygame.KEYDOWN :
-                if event.key == pygame.K_c :
-                    pause = False
-                elif event.key == pygame.K_q :
-                    pygame.quit()
-        transp_surf = pygame.Surface(size)
-        transp_surf.set_alpha(1)
-        screen.blit(transp_surf,transp_surf.get_rect())
-        largeText = pygame.font.Font('freesansbold.ttf',100)
-        TextSurf, TextRect = text_objects("PAUSED",largeText)
-        TextRect.center = ((size[0]/2),(size[1]/3))
-        screen.blit(TextSurf, TextRect)
-        default_font = pygame.font.SysFont('Gill Sans', 30)
-        draw_text("Press 'c' to continue",default_font,screen,400,400,white)
-        button("Restart",150,450,140,40,green,black,game_loop2)
-        button("Menu",360,450,100,40,green,black,game_intro)
-        button("Quit",530,450,100,40,green,black,quit_game)
-        pygame.display.update()
-        clock.tick(15)
 
 # 비행기 크기는 다르게 설정함. 크기에 따라 움직임이는 방법이 달라짐
-# 비행기 속도는 일정, 아이템 먹을때만 빨라지거나 느려짐
+## 비행기
 class Player(object):
     x = 0
     y = 0
@@ -171,20 +150,10 @@ class Player(object):
 
 # 비행기의 속도를 조절할 수 있는 요소
     def update(self):
-
         if self.death == 0:
-        # if self.x_speed > 0:
-        #     self.x_speed += self.speed_bonus
-        # elif self.x_speed < 0:
-        #     self.x_speed -= self.speed_bonus
-        # if self.y_speed > 0:
-        #     self.y_speed += self.speed_bonus
-        # elif self.y_speed < 0:
-        #     self.y_speed -= self.speed_bonus
             self.x += self.x_speed
             self.y += self.y_speed
 
-        #screen.blit(playerImg, (self.x, self.y))
             global p_img, p_img2
             if self.mode == 1:
                 if p_img == 1:
@@ -231,6 +200,7 @@ class Player(object):
 
     def rectangle(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
+
 
 
 # object 나오는곳, 방향 정하는 함수
@@ -283,7 +253,7 @@ def side_direc(self):
             else:
                 self.y_speed = -5
 
-
+### 운석
 class Fireball(object):
     x = 0
     y = 0
@@ -303,10 +273,9 @@ class Fireball(object):
         self.col = random.randint(1,8)
         # 1 - white # 2 - red # 3 - puple # 4 - green # 5 - whitebig # 6 - redbig # 7 - pupplebig # 8 - greenbig
         self.direction = random.randint(1,4)
-
         side_direc(self)
             
-    #암석 움직이는 파트 - 속도조절
+    #암석 움직이는 파트
     def update(self):
         self.x += self.x_speed
         self.y += self.y_speed
@@ -337,10 +306,10 @@ class Fireball(object):
         if self.side == 4 and self.y < -40:
             self.has_reached_limit = True  
         
-
     def rectangle(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
+# 아이템
 class Item1(object):
     x = 0
     y = 0
@@ -357,7 +326,6 @@ class Item1(object):
     def __init__(self):
         self.side = random.randint(1,4)
         self.direction = random.randint(1,4)
-
         side_direc(self)
 
     def update(self):
@@ -399,11 +367,10 @@ def game_loop():
     player = Player(size[0]/2, size[1]/2, 1)
     fireballs = []
     difficulty = 1.0
-    item1 = Item1() # 비행기 5초간 이속증가 아이템
+    item1 = Item1() # 비행기 7초간 이속증가 아이템
     item2 = Item1() # 화면에 나온 운석 제거 아이템
     global p_s
     p_s = 2
-
 
     # 랭킹구현
     if p_img == 1 :
@@ -418,7 +385,6 @@ def game_loop():
     elif p_img == 4 :
         with open(file_path+"highscore_type4.txt", "r") as f :
             highscore = f.read()
-    ##
 
     default_font = pygame.font.SysFont('Gill Sans', 28)
     screen.blit(background_image, [0, 0])
@@ -473,16 +439,24 @@ def game_loop():
         player.bound()
         player.update()
 
-        ###
+        ##
         now= datetime.datetime.now()
         DateAndTime = now.strftime('%Y-%m-%d %H:%M:%S')
         ##
 
-        ## 아이템 1
-        if round(difficulty,1) == 2.0:
-            item1.exist = 1
-            item1.useing = 0
+        # 랜덤 아이템 생성
+        if round(difficulty,1)%2 == 0:
+            rand = random.randint(0,1)
+            # 아이템1 생성
+            if rand == 0:
+                item1.exist = 1
+                item1.useing = 0
+            # 아이템2 생성
+            elif rand == 1:
+                item2.exist = 1
+                item2.useing = 0
 
+        ## 아이템 1
         if item1.exist == 1 and item1.useing == 0:
             item1.update()
             
@@ -493,10 +467,6 @@ def game_loop():
                 p_s = 6
 
         ## 아이템 2
-        if round(difficulty,1) == 1.0:
-            item2.exist = 1
-            item2.useing = 0
-
         if item2.exist == 1 and item2.useing == 0:
             item2.update()
         
@@ -516,7 +486,7 @@ def game_loop():
 
             if fireball.rectangle().colliderect(player.rectangle()):
                 
-                # 랭킹 갱신 #############
+                # 랭킹 갱신
                 if p_img == 1:
                     with open(file_path+"score_type1.csv","a",newline='') as file1 :
                         writer = csv.writer(file1)
@@ -574,12 +544,10 @@ def game_loop():
         ## 아이템 1
         if item1.useing == 1:
             now = pygame.time.get_ticks()
-            if int(now - item1.start_time) >= 10000:
+            if int(now - item1.start_time) >= 7000:
                 p_s = 2
 
         
-
-
 
 
 # 게임진행 2p일때
@@ -600,6 +568,13 @@ def game_loop2():
 
     fireballs = []
     difficulty = 1.0
+
+    item1 = Item1() # 비행기 7초간 이속 3배 증가 아이템
+    item2 = Item1() # 화면에 나온 운석 제거 아이템
+    
+    global p_s1, p_s2
+    p_s1 = 2
+    p_s2 = 2
 
     # 랭킹구현
     with open(file_path+"highscore_2P.txt", "r") as f :
@@ -623,27 +598,27 @@ def game_loop2():
             # 1p키, 2p키 분할               
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT:
-                    player_2.x_speed = 2
+                    player_2.x_speed = p_s2
                 if event.key == pygame.K_LEFT:
-                    player_2.x_speed = -2
+                    player_2.x_speed = -p_s2
                 if event.key == pygame.K_DOWN:
-                    player_2.y_speed = 2
+                    player_2.y_speed = p_s2
                 if event.key == pygame.K_UP:
-                    player_2.y_speed = -2
+                    player_2.y_speed = -p_s2
                 if event.key == pygame.K_c :
                     alive = False
                 if event.key == pygame.K_p :
                     pause = True
-                    paused2()
+                    paused()
 
                 if event.key == pygame.K_d:
-                    player.x_speed = 2
+                    player.x_speed = p_s1
                 if event.key == pygame.K_a:
-                    player.x_speed = -2
+                    player.x_speed = -p_s1
                 if event.key == pygame.K_s:
-                    player.y_speed = 2
+                    player.y_speed = p_s1
                 if event.key == pygame.K_w:
-                    player.y_speed = -2
+                    player.y_speed = -p_s1
 
                 if event.key == pygame.K_SPACE:
                     speed = 2
@@ -673,10 +648,51 @@ def game_loop2():
         player.update()
         player_2.update()
 
-        now= datetime.datetime.now()
+        now = datetime.datetime.now()
         DateAndTime = now.strftime('%Y-%m-%d %H:%M:%S')
 
+        # 랜덤 아이템 생성
+        if score != 0 and score%10 == 0:
+            rand = int(str(now)[-1])
+            # 아이템1 생성
+            if rand == 0:
+                item1.exist = 1
+                item1.useing = 0
+            # 아이템2 생성
+            elif rand == 1:
+                item2.exist = 1
+                item2.useing = 0
 
+        ## 아이템 1
+        if item1.exist == 1 and item1.useing == 0:
+            item1.update()
+            
+            if player.death == 0 and item1.rectangle().colliderect(player.rectangle()):
+                item1.exeist = 0
+                item1.useing = 1
+                item1.start_time = pygame.time.get_ticks()
+                p_s1 = 6
+            if player_2.death == 0 and item1.rectangle().colliderect(player_2.rectangle()):
+                item1.exeist = 0
+                item1.useing = 1
+                item1.start_time = pygame.time.get_ticks()
+                p_s2 = 6
+        
+
+        ## 아이템 2
+        if item2.exist == 1 and item2.useing == 0:
+            item2.update()
+        
+            if (player.death == 0 and item2.rectangle().colliderect(player.rectangle()))
+             or (player_2.death == 0 and item2.rectangle().colliderect(player_2.rectangle())):
+                item2.exist = 0
+                item2.useing = 1
+                score += len(fireballs)
+                difficulty += len(fireballs)*0.1
+                fireballs = []
+                item2 = Item1()
+
+        # 운석
         if len(fireballs) < difficulty:
             fireballs.append(Fireball())
 
@@ -750,6 +766,14 @@ def game_loop2():
             clock.tick(120)
         elif speed == 1:
             clock.tick(60)
+        
+        ## 아이템 1
+        if item1.useing == 1:
+            now = pygame.time.get_ticks()
+            if int(now - item1.start_time) >= 7000:
+                p_s1 = 2
+                p_s2 = 2
+            item1 = Item1()
 
 
 def text_objects(text, font):
