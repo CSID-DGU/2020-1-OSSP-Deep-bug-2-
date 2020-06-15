@@ -717,12 +717,16 @@ def game_loop2():
                     now = pygame.time.get_ticks()
                     if int(now - player.dead_time) >= 3000:
                         player.death = 0
+                else:
+                    now = 0
             elif player_2.death == 1:
                 screen.blit(playerdead, (player_2.x, player_2.y))
                 if (player_2.x-20 <= player.x <= player_2.x+20) and (player_2.y-20 <= player.y <= player_2.y+20):
                     now = pygame.time.get_ticks()
                     if int(now - player_2.dead_time) >= 3000:
                         player_2.death = 0
+                else:
+                    now = 0
 
             if fireball.has_reached_limit:
                 fireballs.pop(index)
