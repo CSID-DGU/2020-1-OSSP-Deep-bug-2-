@@ -48,8 +48,8 @@ clock.tick(60)
 pygame.key.set_repeat(1,1)
 
 ## 파일 경로 지정
-file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deep-bug-2/Dodge-game/"
-#file_path = "/home/wj/OSSP/Dodge-game/"
+#file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deep-bug-2/Dodge-game/"
+file_path = "/home/wj/OSSP/Dodge-game/"
 #file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 
@@ -78,8 +78,8 @@ type3_big = pygame.image.load(file_path+"type3_big.png")
 type4_big = pygame.image.load(file_path+"type4_big.png")
 
 # 아이템
-itemimg1 = pygame.image.load(file_path+"item1.png")
-itemimg2 = pygame.image.load(file_path+"item2.png")
+itemimg1 = pygame.image.load(file_path+"speedup.png")
+itemimg2 = pygame.image.load(file_path+"bomb.png")
 itemimg3 = pygame.image.load(file_path+"item.png")
 
 # 운석
