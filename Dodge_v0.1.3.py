@@ -48,8 +48,8 @@ clock.tick(60)
 pygame.key.set_repeat(1,1)
 
 ## 파일 경로 지정
-#file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deep-bug-2/Dodge-game/"
-file_path = "/home/wj/OSSP/Dodge-game/"
+file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+#file_path = "/home/wj/OSSP/Dodge-game/"
 #file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 
@@ -65,10 +65,10 @@ playerimg1 = pygame.image.load(file_path+"type1.png")
 playerimg2 = pygame.image.load(file_path+"type2-2.png")
 playerimg3 = pygame.image.load(file_path+"type3-2.png")
 playerimg4 = pygame.image.load(file_path+"type4-2.png")
-playerimg11 = pygame.image.load(file_path+"type11.png")
-playerimg22 = pygame.image.load(file_path+"type22.png")
-playerimg33 = pygame.image.load(file_path+"type33.png")
-playerimg44 = pygame.image.load(file_path+"type44.png")
+playerimg11 = pygame.image.load(file_path+"type1_small.png")
+playerimg22 = pygame.image.load(file_path+"type2_small.png")
+playerimg33 = pygame.image.load(file_path+"type3_small.png")
+playerimg44 = pygame.image.load(file_path+"type4_small.png")
 playerdead = pygame.image.load(file_path+"explosion.png")
 
 # 매뉴에 쓰는 비행기
