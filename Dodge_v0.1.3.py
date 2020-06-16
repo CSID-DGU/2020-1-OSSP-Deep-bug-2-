@@ -32,7 +32,6 @@ white = (255,255,255)
 red = (200,0,0)
 green = (0,200,0)
 orange = (255,127,0)
-grey = (50,50,50)
 blue = (0,0,225)
 bright_red = (255,0,0)
 bright_green = (0,255,0)
@@ -60,7 +59,6 @@ intro_image = pygame.image.load(file_path+"intro_image.jpg").convert()
 pygame.display.set_caption("OSSP - DeepBug - Dodge v0.1.3")
 
 # 비행기
-playerImg = pygame.image.load(file_path+"spaceship.png")
 playerimg1 = pygame.image.load(file_path+"type1.png")
 playerimg2 = pygame.image.load(file_path+"type2-2.png")
 playerimg3 = pygame.image.load(file_path+"type3-2.png")
@@ -119,11 +117,13 @@ def paused() :
         for event in pygame.event.get() :
             if event.type == pygame.QUIT :
                 pygame.quit()
+                sys.exit()
             if event.type == pygame.KEYDOWN :
                 if event.key == pygame.K_c :
                     pause = False
                 elif event.key == pygame.K_q :
                     pygame.quit()
+                    sys.exit()
                      
         transp_surf = pygame.Surface(size)
         transp_surf.set_alpha(1)
@@ -489,6 +489,7 @@ def game_loop():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit()
             
             # 키조작, p = pause, space_bar = speed*2
             if event.type == pygame.KEYDOWN:
@@ -732,6 +733,7 @@ def game_loop2():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit()
 
             # 1p키, 2p키 분할               
             if event.type == pygame.KEYDOWN:
@@ -916,14 +918,16 @@ def game_loop2():
                     now = pygame.time.get_ticks()
                     if int(now - player.dead_time) >= 3000:
                         player.death = 0
+                else:
+                    now = 0
             elif player_2.death == 1:
                 screen.blit(playerdead, (player_2.x, player_2.y))
                 if (player_2.x-20 <= player.x <= player_2.x+20) and (player_2.y-20 <= player.y <= player_2.y+20):
                     now = pygame.time.get_ticks()
                     if int(now - player_2.dead_time) >= 3000:
                         player_2.death = 0
-            else :
-                now = 0
+                else :
+                    now = 0
 
             if fireball.has_reached_limit:
                 fireballs.pop(index)
