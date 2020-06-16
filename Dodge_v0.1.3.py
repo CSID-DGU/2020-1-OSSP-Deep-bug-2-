@@ -1,12 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
-
-# In[2]:
-
-
-
-#!/usr/bin/env python
-# coding: utf-8
 
 
 #-*- coding: utf-8 -*-
@@ -48,16 +40,17 @@ clock.tick(60)
 pygame.key.set_repeat(1,1)
 
 ## 파일 경로 지정
-file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+#file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "/home/wj/OSSP/Dodge-game/"
 #file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-#file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+file_path = "/home/dohee/Dodge-game/"
 
 ## 이미지
-# 배경, 인트로 
+# 배경, 인트로, button
 background_image = pygame.image.load(file_path+"background.jpg").convert()
 intro_image = pygame.image.load(file_path+"intro_image.jpg").convert()
 pygame.display.set_caption("OSSP - DeepBug - Dodge v0.1.3")
+help_image = pygame.image.load(file_path+"help_image.png")
 
 # 비행기
 playerImg = pygame.image.load(file_path+"spaceship.png")
@@ -91,6 +84,9 @@ fireball_w_big = pygame.image.load(file_path+"meteor_w_big.png")
 fireball_r_big = pygame.image.load(file_path+"meteor_r_big.png")
 fireball_p_big = pygame.image.load(file_path+"meteor_p_big.png")
 fireball_g_big = pygame.image.load(file_path+"meteor_g_big.png")
+
+#help
+menual = pygame.image.load(file_path+"help.png")
 
 
 ### 게임 내에 text를 넣을때 쓰는 함수
@@ -916,6 +912,9 @@ def game_loop2():
                     now = pygame.time.get_ticks()
                     if int(now - player.dead_time) >= 3000:
                         player.death = 0
+                else:
+                    now=0
+
             elif player_2.death == 1:
                 screen.blit(playerdead, (player_2.x, player_2.y))
                 if (player_2.x-20 <= player.x <= player_2.x+20) and (player_2.y-20 <= player.y <= player_2.y+20):
@@ -1306,6 +1305,39 @@ def button(msg,x,y,w,h,ic,ac,action=None):
     textRect.center = ((x+(w/2)), (y+(h/2)))
     screen.blit(textSurf, textRect)
 
+def help_ex():
+    
+    screen.blit(menual, (0,0))
+    intro = True
+    while intro:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYUP:
+            
+                if event.key == pygame.K_1:
+                    v = v - 0.002
+                intro_sound.set_volume(v)
+                if v < 0 :
+                    v = 0
+                if event.key == pygame.K_2:
+                    v = v + 0.002
+                intro_sound.set_volume(v)
+                if v > 1 :
+                    v = 1
+
+
+            button("1 Play",550,180,200,50,green,blue,select_type)
+            button("2 Play",550,250,200,50,green,bright_green,select_type2)
+            button("Ranking",550,320,200,50,orange,bright_orange,select_ranking)
+            button("Quit",550,390,200,50,red,bright_red, quit_game)
+
+
+        pygame.display.update()
+
+
+
 # 게임 매뉴 선택 화면
 def game_intro():
     
@@ -1346,6 +1378,7 @@ def game_intro():
             TextRect.center = ((size[0]/2),(size[1]/4))
             screen.blit(TextSurf, TextRect)
 
+            button_img(help_image,705,25,70,70,help_ex)
             button("1 Play",300,230,200,50,green,blue,select_type)
             button("2 Play",300,300,200,50,green,bright_green,select_type2)
             button("Ranking",300,370,200,50,orange,bright_orange,select_ranking)
@@ -1444,17 +1477,6 @@ def dead():
 
 # 프로그램 시작
 game_intro()
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
 
 
 
