@@ -47,9 +47,9 @@ clock.tick(60)
 pygame.key.set_repeat(1,1)
 
 ## 파일 경로 지정
-file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+#file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "/home/wj/OSSP/Dodge-game/"
-#file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "C:/Users/DHKim/Documents/GitHub/2020-1-OSSP1-Deepbug-2/팀프로젝트/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 
 ## 이미지
@@ -90,8 +90,12 @@ fireball_r_big = pygame.image.load(file_path+"meteor_r_big.png")
 fireball_p_big = pygame.image.load(file_path+"meteor_p_big.png")
 fireball_g_big = pygame.image.load(file_path+"meteor_g_big.png")
 
+# 사운드
+mute = pygame.image.load(file_path+"mute.png")
+play_sound = pygame.image.load(file_path+"play.png")
 
-### 게임 내에 text를 넣을때 쓰는 함수
+
+# 게임 내에 text를 넣을때 쓰는 함수
 def draw_text(text,font,surface,x,y,main_color) :
     text_obj = font.render(text,True,main_color)
     text_rect = text_obj.get_rect()
@@ -103,14 +107,7 @@ def text_objects(text, font):
        textSurface = font.render(text, True, (white))
        return textSurface, textSurface.get_rect()
 
-def message_display(text):
-       largeText = pygame.font.Font('Creepster-Regular.ttf',115)
-       TextSurf, TextRect = text_objects(text, largeText)
-       TextRect.center = ((size[0]/2),(size[1]/3))
-       gameDisplay.blit(TextSurf, TextRect)
-
-
-### 일시정지 함수
+# 일시정지 함수
 def paused() :
     pause = True
     while pause :
@@ -145,6 +142,11 @@ def paused() :
         pygame.display.update()
         clock.tick(10)
 
+# 사운드 함수
+def muted() :
+    pygame.mixer.pause()
+def sound_play() :
+    pygame.mixer.unpause()
 
 # 비행기 크기는 다르게 설정함. 크기에 따라 움직임이는 방법이 달라짐
 ## 비행기
@@ -464,6 +466,7 @@ def game_loop():
     speed = 1
 
     default_font = pygame.font.SysFont('Gill Sans', 28)
+    default_font2 = pygame.font.SysFont('Gill Sans',13)
     screen.blit(background_image, [0, 0])
 
     player.update()
@@ -504,21 +507,20 @@ def game_loop():
                 if event.key == pygame.K_SPACE:
                     speed = 2
                 ###########################
-                if event.key == pygame.K_1:
+                if event.key == pygame.K_COMMA:
                     v = v - 0.001
                 explosion_sound.set_volume(v)
                 item_sound.set_volume(v)
                 whilegame.set_volume(v)
                 if v < 0 :
                     v = 0
-                if event.key == pygame.K_2:
+                if event.key == pygame.K_PERIOD:
                     v = v + 0.001
                 explosion_sound.set_volume(v)
                 item_sound.set_volume(v)
                 whilegame.set_volume(v)
                 if v > 1 :
                     v = 1
-
                 if event.key == pygame.K_p :
                     paused()
 
@@ -540,6 +542,7 @@ def game_loop():
         draw_text('Score : {}'.format(score),default_font,screen,80,20,yellow)
         draw_text("High Score : "+str(highscore),default_font,screen,680,20,yellow)
         draw_text("Level : "+str(int(difficulty)),default_font,screen,380,20,yellow)
+        draw_text('Volume : {}'.format(int(v*200)),default_font2,screen,40,590,white)
 
         player.bound()
         player.update()
@@ -722,6 +725,7 @@ def game_loop2():
         highscore = f.read()
 
     default_font = pygame.font.SysFont('Gill Sans', 28)
+    default_font2 = pygame.font.SysFont('Gill Sans',13)
     screen.blit(background_image, [0, 0])
 
     player.update()
@@ -745,14 +749,14 @@ def game_loop2():
                     player_2.y_speed = p_s2
                 if event.key == pygame.K_UP:
                     player_2.y_speed = -p_s2
-                if event.key == pygame.K_1:
+                if event.key == pygame.K_COMMA:
                     v = v - 0.001
                 explosion_sound.set_volume(v)
                 item_sound.set_volume(v)
                 whilegame.set_volume(v)
                 if v < 0 :
                     v = 0
-                if event.key == pygame.K_2:
+                if event.key == pygame.K_PERIOD:
                     v = v + 0.001
                 explosion_sound.set_volume(v)
                 item_sound.set_volume(v)
@@ -793,7 +797,7 @@ def game_loop2():
         draw_text('Score : {}'.format(score),default_font,screen,80,20,yellow)
         draw_text("High Score : "+str(highscore),default_font,screen,680,20,yellow)
         draw_text("level : "+str(int(difficulty)),default_font,screen,380,20,yellow)
-
+        draw_text('Volume : {}'.format(int(v*200)),default_font2,screen,40,590,white)
         player.bound()
         player_2.bound()
         player.update()
@@ -1334,12 +1338,12 @@ def game_intro():
                 sys.exit()
             if event.type == pygame.KEYUP:
             
-                if event.key == pygame.K_1:
+                if event.key == pygame.K_COMMA:
                     v = v - 0.002
                 intro_sound.set_volume(v)
                 if v < 0 :
                     v = 0
-                if event.key == pygame.K_2:
+                if event.key == pygame.K_PERIOD:
                     v = v + 0.002
                 intro_sound.set_volume(v)
                 if v > 1 :
@@ -1354,6 +1358,8 @@ def game_intro():
             button("2 Play",300,300,200,50,green,bright_green,select_type2)
             button("Ranking",300,370,200,50,orange,bright_orange,select_ranking)
             button("Quit",300,440,200,50,red,bright_red, quit_game)
+            button_img(mute,50,18,40,40,muted)
+            button_img(play_sound,17,20,40,40,sound_play)
 
         pygame.display.update()
 
