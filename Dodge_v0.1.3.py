@@ -42,7 +42,7 @@ pygame.key.set_repeat(1,1)
 #file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "/home/wj/OSSP/Dodge-game/"
 #file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-file_path = "/home/dohee/Dodge-game/"
+file_path = "/home/dohee/master/Dodge-game/"
 #file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 
 
@@ -52,6 +52,7 @@ background_image = pygame.image.load(file_path+"background.jpg").convert()
 intro_image = pygame.image.load(file_path+"intro_image.jpg").convert()
 pygame.display.set_caption("OSSP - DeepBug - Dodge v0.1.3")
 help_image = pygame.image.load(file_path+"help_image.png")
+arrow = pygame.image.load(file_path+"arrow.png")
 
 # 비행기
 playerimg1 = pygame.image.load(file_path+"type1.png")
@@ -1338,10 +1339,8 @@ def help_ex():
                     v = 1
 
 
-            button("1 Play",550,180,200,50,green,blue,select_type)
-            button("2 Play",550,250,200,50,green,bright_green,select_type2)
-            button("Ranking",550,320,200,50,orange,bright_orange,select_ranking)
-            button("Quit",550,390,200,50,red,bright_red, quit_game)
+            button_img(arrow,705,25,70,70,game_intro)
+            
 
 
         pygame.display.update()
