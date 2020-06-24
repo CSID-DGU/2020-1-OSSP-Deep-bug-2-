@@ -6,7 +6,6 @@ import pygame
 from random import randint
 from time import sleep
 import sys
-from os import path
 from datetime import datetime
 from pandas import read_csv
 import csv
@@ -39,8 +38,8 @@ clock.tick(60)
 pygame.key.set_repeat(1,1)
 
 ## 파일 경로 지정
-file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug/Dodge-game/"
-#file_path = "/home/wj/OSSP/Dodge-game/"
+#file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+file_path = "/home/wj/OSSP/Dodge-game/"
 #file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "/home/dohee/master/Dodge-game/"
 #file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
@@ -86,15 +85,12 @@ fireball_r_big = pygame.image.load(file_path+"meteor_r_big.png")
 fireball_p_big = pygame.image.load(file_path+"meteor_p_big.png")
 fireball_g_big = pygame.image.load(file_path+"meteor_g_big.png")
 
-#help
+# 도움말 이미지
 menual = pygame.image.load(file_path+"help.png")
 
-
-# 사운드
+# 음소거 버튼 이미지
 mute = pygame.image.load(file_path+"mute.png")
 play_sound = pygame.image.load(file_path+"play.png")
-
-
 
 # 게임 내에 text를 넣을때 쓰는 함수
 def draw_text(text,font,surface,x,y,main_color) :
@@ -105,13 +101,21 @@ def draw_text(text,font,surface,x,y,main_color) :
     surface.blit(text_obj,text_rect)
 
 def text_objects(text, font):
-       textSurface = font.render(text, True, (white))
-       return textSurface, textSurface.get_rect()
+    textSurface = font.render(text, True, (white))
+    return textSurface, textSurface.get_rect()
 
 # 일시정지 함수
-def paused() :
+def paused():
+    transp_surf = pygame.Surface(size)
+    transp_surf.set_alpha(1)
+    largeText = pygame.font.Font('freesansbold.ttf',100)
+    TextSurf, TextRect = text_objects("PAUSED",largeText)
+    TextRect.center = ((size[0]/2),(size[1]/3))
+    default_font = pygame.font.SysFont('Gill Sans', 30)
+    draw_text("Press 'c' to continue",default_font,screen,400,400,white)
+    
     pause = True
-    while pause :
+    while pause:
         for event in pygame.event.get() :
             if event.type == pygame.QUIT :
                 pygame.quit()
@@ -121,35 +125,55 @@ def paused() :
                     pause = False
                 elif event.key == pygame.K_q :
                     pygame.quit()
-                    sys.exit()
-                     
-        transp_surf = pygame.Surface(size)
-        transp_surf.set_alpha(1)
+                    sys.exit()     
         screen.blit(transp_surf,transp_surf.get_rect())
-        largeText = pygame.font.Font('freesansbold.ttf',100)
-        TextSurf, TextRect = text_objects("PAUSED",largeText)
-        TextRect.center = ((size[0]/2),(size[1]/3))
         screen.blit(TextSurf, TextRect)
-        default_font = pygame.font.SysFont('Gill Sans', 30)
         draw_text("Press 'c' to continue",default_font,screen,400,400,white)
+        button_img(help_image,705,25,70,70,help_ex)
+        button("Menu",360,450,100,40,green,black,game_intro)
+        button("Quit",530,450,100,40,green,black,quit_game)
         if choose == 1:
-            button("Restart",150,450,140,40,green,black,game_loop)
-            button("Menu",360,450,100,40,green,black,game_intro)
-            button("Quit",530,450,100,40,green,black,quit_game)
+            button("Restart",150,450,140,40,green,black,game_loop) 
         elif choose == 2:
             button("Restart",150,450,140,40,green,black,game_loop2)
-            button("Menu",360,450,100,40,green,black,game_intro)
-            button("Quit",530,450,100,40,green,black,quit_game)
         pygame.display.update()
         clock.tick(10)
 
-# 사운드 함수
+# 음소거 함수
 def muted() :
     pygame.mixer.pause()
 def sound_play() :
     pygame.mixer.unpause()
 
-# 비행기 크기는 다르게 설정함. 크기에 따라 움직임이는 방법이 달라짐
+# 도움말 함수
+def help_ex():
+    global v
+    screen.blit(menual, (0,0))
+    intro = True
+    while intro:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_1:
+                    v = v - 0.005
+                    if v < 0 :
+                        v = 0
+                explosion_sound.set_volume(v)
+                item_sound.set_volume(v)
+                whilegame.set_volume(v)
+                if event.key == pygame.K_2:
+                    v = v + 0.005
+                    if v > 1 :
+                        v = 1
+                explosion_sound.set_volume(v)
+                item_sound.set_volume(v)
+                whilegame.set_volume(v)
+
+            button_img(arrow,705,25,70,70,game_intro)
+        pygame.display.update()
+
 ## 비행기
 class Player(object):
     x = 0
@@ -162,12 +186,13 @@ class Player(object):
     death = 0
     dead_time = 0
 
+    # 초기 설정
     def __init__(self, x, y, mode):
         self.x = x
         self.y = y
         self.mode = mode
 
-# 비행기의 속도를 조절할 수 있는 요소
+    # 비행기의 위치 조절
     def update(self):
         if self.death == 0:
             self.x += self.x_speed
@@ -207,7 +232,6 @@ class Player(object):
                     self.width = 35
                     self.height = 35
                     screen.blit(playerimg44, (self.x, self.y))
-                    
             elif self.mode == 2:
                 if p_img2 == 1:
                     self.width = 40
@@ -242,7 +266,7 @@ class Player(object):
                     self.height = 35
                     screen.blit(playerimg44, (self.x, self.y))
 
-# 비행기위 위치를 업데이트 하는 과정
+    # 비행기가 화면 밖으로 벗어나는것 방지
     def left_bound(self):
         if self.x <= 0:
             self.x = 0
@@ -259,19 +283,19 @@ class Player(object):
         if self.y >= size[1] - self.height:
             self.y = size[1] - self.height
             self.y_speed = self.y_speed * -1
-
     def bound(self):
         self.left_bound()
         self.right_bound()
         self.top_bound()
         self.bottom_bound()
 
+    # 비행기 충돌
     def rectangle(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
 
 
-# object 나오는곳, 방향 정하는 함수
+# 운석과 아이템 나오는곳, 방향 정하는 함수
 def side_direc(self):
         if self.side == 1:
             self.x = -60 # get to the left of the window
@@ -284,7 +308,6 @@ def side_direc(self):
                 self.y_speed = 1.4142135623731*5/2
             else:
                 self.x_speed = 5
-
         elif self.side == 2:
             self.x = randint(0, size[0]-self.width)
             self.y = -60
@@ -296,7 +319,6 @@ def side_direc(self):
                 self.y_speed = 1.4142135623731*5/2
             else:
                 self.y_speed = 5
-
         elif self.side == 3:
             self.x = size[0] + 60
             self.y = randint(0, size[1]-self.height)
@@ -308,7 +330,6 @@ def side_direc(self):
                 self.y_speed = 1.4142135623731*5/2
             else:
                 self.x_speed = -5
-
         elif self.side == 4:
             self.x = randint(0, size[0]-self.width)
             self.y = size[1] + 60
@@ -381,11 +402,11 @@ class Fireball(object):
             self.has_reached_limit = True
         if self.side == 4 and self.y < -40:
             self.has_reached_limit = True  
-        
+    # 운석 충돌
     def rectangle(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
-# 아이템
+### 아이템
 class Item(object):
     x = 0
     y = 0
@@ -401,12 +422,14 @@ class Item(object):
     useing = 0
     mode = 0
 
+    # 초기 생성위치
     def __init__(self,mode):
         self.side = randint(1,4)
         self.direction = randint(1,4)
         side_direc(self)
         self.mode = mode
 
+    # 아이템 별 이동
     def update(self):
         self.x += self.x_speed
         self.y += self.y_speed
@@ -431,40 +454,37 @@ class Item(object):
             self.y = size[1] - self.height
             self.y_speed = self.y_speed * -1
 
+    # 아이템 충돌
     def rectangle(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
 
-# 게임진행
+## 게임진행
 def game_loop():
     # 음악재생
-    global v
+    global v ,whilegame, explosion_sound, item_sound
     pygame.mixer.pause()
     pygame.mixer.music.stop()
-    whilegame = pygame.mixer.Sound(file_path+"whilegame.wav")
     whilegame.set_volume(v)
     whilegame.play()    
-    explosion_sound = pygame.mixer.Sound(file_path+"explosion.wav")
     explosion_sound.set_volume(v)
-    item_sound = pygame.mixer.Sound(file_path+"item.wav")
     item_sound.set_volume(v)
 
     score = 0
-    highscore=0
+    highscore = 0
     player = Player(size[0]/2, size[1]/2, 1)
     fireballs = []
-
-    difficulty = 1.0
+    difficulty = 1.0    # 난이도(level)
     
     item1 = Item(1) # 비행기 5초간 이속증가 아이템
     item2 = Item(2) # 화면에 나온 운석 제거 아이템
-    item3 = Item(3)
+    item3 = Item(3) # 비행기 5초간 크기 감소 아이템
 
-    p_s = 2
+    p_s = 2 # 비행기 속도
 
     global p_img
 
-    speed = 1
+    speed = 1   # 게임 속도
 
     default_font = pygame.font.SysFont('Gill Sans', 28)
     default_font2 = pygame.font.SysFont('Gill Sans',13)
@@ -487,7 +507,7 @@ def game_loop():
         with open(file_path+"highscore_type4.txt", "r") as f :
             highscore = f.read()
 
-    # 게임 조작
+    # 키 조작
     alive = True
     while alive:
         for event in pygame.event.get():
@@ -495,7 +515,7 @@ def game_loop():
                 pygame.quit()
                 sys.exit()
             
-            # 키조작, p = pause, space_bar = speed*2
+            # 키조작, 'p' = pause, 'space_bar' = speed*2, ',' = sound donw, '.' = sound up
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                     player.x_speed = p_s
@@ -507,24 +527,22 @@ def game_loop():
                     player.y_speed = -p_s
                 if event.key == pygame.K_SPACE:
                     speed = 2
-                ###########################
                 if event.key == pygame.K_COMMA:
-                    v = v - 0.001
+                    v = v - 0.005
+                    if v < 0 :
+                        v = 0
                 explosion_sound.set_volume(v)
                 item_sound.set_volume(v)
                 whilegame.set_volume(v)
-                if v < 0 :
-                    v = 0
                 if event.key == pygame.K_PERIOD:
-                    v = v + 0.001
+                    v = v + 0.005
+                    if v > 1 :
+                        v = 1
                 explosion_sound.set_volume(v)
                 item_sound.set_volume(v)
                 whilegame.set_volume(v)
-                if v > 1 :
-                    v = 1
                 if event.key == pygame.K_p :
                     paused()
-
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                     player.x_speed = 0
@@ -536,8 +554,6 @@ def game_loop():
                     player.y_speed = 0
                 if event.key == pygame.K_SPACE:
                     speed = 1
-
-
 
         screen.blit(background_image, [0, 0])
         draw_text('Score : {}'.format(score),default_font,screen,80,20,yellow)
@@ -566,10 +582,9 @@ def game_loop():
                 item3.exist = 1
                 item3.useing = 0
 
-        ## 아이템 1
+        # 아이템 1
         if item1.exist == 1 and item1.useing == 0:
             item1.update()
-            
             if item1.rectangle().colliderect(player.rectangle()):
                 pygame.mixer.Sound.play(item_sound)
                 item1.exeist = 0
@@ -577,10 +592,9 @@ def game_loop():
                 item1.item1_t = pygame.time.get_ticks()
                 p_s = 6
 
-        ## 아이템 2
+        # 아이템 2
         if item2.exist == 1 and item2.useing == 0:
             item2.update()
-        
             if item2.rectangle().colliderect(player.rectangle()):
                 pygame.mixer.Sound.play(item_sound)
                 item2.exist = 0
@@ -590,10 +604,9 @@ def game_loop():
                 fireballs = []
                 item2 = Item(2)
 
-        ## 아이템 3
+        # 아이템 3
         if item3.exist == 1 and item3.useing == 0:
             item3.update()
-            
             if item3.rectangle().colliderect(player.rectangle()):
                 pygame.mixer.Sound.play(item_sound)
                 item3.exeist = 0
@@ -608,14 +621,12 @@ def game_loop():
                 elif p_img == 4:
                     p_img = 44
                 
-
         # 운석
         if len(fireballs) < difficulty:
             fireballs.append(Fireball())
 
         for index, fireball in enumerate(fireballs):
             fireball.update()
-
             if fireball.rectangle().colliderect(player.rectangle()):
                 pygame.mixer.Sound.play(explosion_sound)
                 # 랭킹 갱신
@@ -667,14 +678,14 @@ def game_loop():
         elif speed == 1:
             clock.tick(60)
         
-        ## 아이템 1
+        # 아이템 1
         if item1.useing == 1:
             now = pygame.time.get_ticks()
             if int(now - item1.item1_t) >= 5000:
                 p_s = 2
                 item1 = Item(1)
 
-        ## 아이템 3
+        # 아이템 3
         if item3.useing == 1:
             now = pygame.time.get_ticks()
             if int(now - item3.item3_t) >= 5000:
@@ -690,15 +701,12 @@ def game_loop():
         
 # 게임진행 2p일때
 def game_loop2():
-    global v
+    global v, whilegame, explosion_sound, item_sound
     pygame.mixer.pause()
     pygame.mixer.music.stop()
-    whilegame = pygame.mixer.Sound(file_path+"whilegame.wav")
     whilegame.set_volume(v)
     whilegame.play()  
-    explosion_sound = pygame.mixer.Sound(file_path+"explosion.wav")
     explosion_sound.set_volume(v)
-    item_sound = pygame.mixer.Sound(file_path+"item.wav")
     item_sound.set_volume(v)
 
     score = 0
@@ -710,8 +718,8 @@ def game_loop2():
     fireballs = []
     difficulty = 1.0
 
-    item1 = Item(1) # 비행기 5초간 이속 3배 증가 아이템
-    item2 = Item(2) # 화면에 나온 운석 제거 아이템
+    item1 = Item(1)
+    item2 = Item(2)
     item3 = Item(3)
 
     p_s1 = 2
@@ -751,22 +759,19 @@ def game_loop2():
                 if event.key == pygame.K_UP:
                     player_2.y_speed = -p_s2
                 if event.key == pygame.K_COMMA:
-                    v = v - 0.001
+                    v = v - 0.005
+                    if v < 0 :
+                        v = 0
                 explosion_sound.set_volume(v)
                 item_sound.set_volume(v)
                 whilegame.set_volume(v)
-                if v < 0 :
-                    v = 0
                 if event.key == pygame.K_PERIOD:
-                    v = v + 0.001
+                    v = v + 0.005
+                    if v > 1 :
+                        v = 1
                 explosion_sound.set_volume(v)
                 item_sound.set_volume(v)
                 whilegame.set_volume(v)
-                if v > 1 :
-                    v = 1
-                if event.key == pygame.K_p :
-                    paused()
-
                 if event.key == pygame.K_d:
                     player.x_speed = p_s1
                 if event.key == pygame.K_a:
@@ -775,11 +780,11 @@ def game_loop2():
                     player.y_speed = p_s1
                 if event.key == pygame.K_w:
                     player.y_speed = -p_s1
-
+                if event.key == pygame.K_p :
+                    paused()    
                 if event.key == pygame.K_SPACE:
                     speed = 2
         
-
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
                     player_2.x_speed = 0
@@ -789,10 +794,8 @@ def game_loop2():
                     player_2.y_speed = 0
                 if event.key == pygame.K_w or event.key == pygame.K_s:
                     player.y_speed = 0
-                    
                 if event.key == pygame.K_SPACE:
                     speed = 1
-
 
         screen.blit(background_image, [0, 0])
         draw_text('Score : {}'.format(score),default_font,screen,80,20,yellow)
@@ -825,7 +828,6 @@ def game_loop2():
         ## 아이템 1
         if item1.exist == 1 and item1.useing == 0:
             item1.update()
-            
             if player.death == 0 and item1.rectangle().colliderect(player.rectangle()):
                 pygame.mixer.Sound.play(item_sound)
                 item1.exeist = 0
@@ -838,12 +840,10 @@ def game_loop2():
                 item1.useing = 1
                 item1.item1_t = pygame.time.get_ticks()
                 p_s2 = 6
-        
 
         ## 아이템 2
         if item2.exist == 1 and item2.useing == 0:
             item2.update()
-        
             if (player.death == 0 and item2.rectangle().colliderect(player.rectangle())) or (player_2.death == 0 and item2.rectangle().colliderect(player_2.rectangle())):
                 pygame.mixer.Sound.play(item_sound)
                 item2.exist = 0
@@ -856,7 +856,6 @@ def game_loop2():
         ## 아이템 3
         if item3.exist == 1 and item3.useing == 0:
             item3.update()
-            
             if player.death == 0 and item3.rectangle().colliderect(player.rectangle()):
                 pygame.mixer.Sound.play(item_sound)
                 item3.exeist = 0
@@ -870,7 +869,6 @@ def game_loop2():
                     p_img = 33
                 elif p_img == 4:
                     p_img = 44
-                
             if player_2.death == 0 and item3.rectangle().colliderect(player_2.rectangle()):
                 pygame.mixer.Sound.play(item_sound)
                 item3.exeist = 0
@@ -885,7 +883,6 @@ def game_loop2():
                 elif p_img2 == 4:
                     p_img2 = 44
                 
-
         # 운석
         if len(fireballs) < difficulty:
             fireballs.append(Fireball())
@@ -894,11 +891,9 @@ def game_loop2():
             fireball.update()
 
             if fireball.rectangle().colliderect(player.rectangle()):
-                
                 player.death = 1
                 player.dead_time = pygame.time.get_ticks()
             elif fireball.rectangle().colliderect(player_2.rectangle()):
-                
                 player_2.death = 1
                 player_2.dead_time = pygame.time.get_ticks()
 
@@ -913,7 +908,6 @@ def game_loop2():
                 with open(file_path+"highscore_2P.txt", "w") as f :
                     f.write(str(highscore))
 
-                
                 pygame.mixer.music.stop()
                 death_screen(score)
 
@@ -947,7 +941,7 @@ def game_loop2():
         elif speed == 1:
             clock.tick(60)
         
-        ## 아이템 1
+        # 아이템 1
         if item1.useing == 1:
             now = pygame.time.get_ticks()
             if int(now - item1.item1_t) >= 5000:
@@ -955,7 +949,7 @@ def game_loop2():
                 p_s2 = 2
             item1 = Item(1)
 
-        ## 아이템 3
+        # 아이템 3
         if item3.useing == 1:
             now = pygame.time.get_ticks()
             if int(now - item3.item3_t) >= 5000:
@@ -978,6 +972,32 @@ def game_loop2():
                 item3 = Item(3)
 
 ## 게임 매뉴 구성 부분
+# 버튼 구현 함수
+def button_img(img,x,y,w,h,action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    
+    screen.blit(img,[x,y])
+
+    if x+w > mouse[0] > x and y+h > mouse[1] > y:
+        if click[0] == 1 and action != None:
+           action()
+
+def button(msg,x,y,w,h,ic,ac,action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+
+    pygame.draw.rect(screen, ac,(x,y,w,h))
+
+    if x+w > mouse[0] > x and y+h > mouse[1] > y:
+        if click[0] == 1 and action != None:
+           action()
+
+    smallText = pygame.font.SysFont("Gill Sans MT", 40)
+    textSurf, textRect = text_objects(msg, smallText)
+    textRect.center = ((x+(w/2)), (y+(h/2)))
+    screen.blit(textSurf, textRect)
+
 # 1p 모드 선택창
 def select_type():
     screen.blit(intro_image, [0, 0])
@@ -985,11 +1005,9 @@ def select_type():
     go = True
     while go:
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
             button("Type 1",275,250,95,50,green,black,start_game1_1)
             button("Type 2",430,250,95,50,green,black,start_game1_2)
             button("Type 3",275,450,95,50,green,black,start_game1_3)
@@ -1004,7 +1022,6 @@ def select_type():
 # 2p모드 선택창
 def select_type2():
     screen.blit(intro_image, [0, 0])
-
     select_font = pygame.font.SysFont('Gill Sans', 40)
     if choose == 1:
         draw_text('1P choose',select_font,screen,400,100,white)
@@ -1014,11 +1031,9 @@ def select_type2():
     go = True
     while go:
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
             button("Type 1",275,250,95,50,green,black,start_game2_1)
             button("Type 2",430,250,95,50,green,black,start_game2_2)
             button("Type 3",275,450,95,50,green,black,start_game2_3)
@@ -1090,17 +1105,16 @@ def start_game2_4():
         p_img2 = 4
         main_screen()    
 
+# 랭킹창 보여주기
 def select_ranking():
     screen.blit(intro_image, [0, 0])
 
     go = True
     while go:
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
             button("Type 1",275,200,95,50,green,black,show_ranking1)
             button("Tpye 2",430,200,95,50,green,black,show_ranking2)
             button("Type 3",275,400,95,50,green,black,show_ranking3)
@@ -1114,250 +1128,105 @@ def select_ranking():
         pygame.display.update()
 
 def show_ranking1():
-    screen.blit(intro_image, [0, 0])
-    default_font = pygame.font.SysFont('Gill Sans', 28)
-    f = read_csv(file_path+"score_type1.csv")
-    f.columns=['score','time']
-    f = f.sort_values(["score"],ascending=[False])
-    f.to_csv(file_path+"score_type1.txt",index=False,header=None,sep="\n")
-    f = open(file_path+"score_type1.txt")
-    for i in range(20) :
-        if i%2 == 0 :
-            scoring = f.readline()
-            scoring = scoring.rstrip()
-            draw_text("Score :"+scoring,default_font,screen,250,160+30+15*(i+1),white)
-        elif i%2 == 1 :
-            timing = f.readline()
-            timing = timing.rstrip()
-            draw_text(timing,default_font,screen,500,160+30+15*i,white)
-    rank = True
-    while rank:
-        for event in pygame.event.get():
-
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            largeText = pygame.font.SysFont('Creepster-Regular.ttf', 90)
-            TextSurf, TextRect = text_objects("RANKING",   largeText)
-            TextRect.center = ((size[0]/2),(size[1]/(4.5)))
-            screen.blit(TextSurf, TextRect)
-            
-            button("Menu",225,500,95,50,green,bright_green,game_intro)
-            button("Ranking",325,500,150,50,orange,bright_orange,select_ranking)
-            button("Quit",480,500,95,50,red,bright_red, quit_game)
-
-        pygame.display.update()
-
+    global p_img
+    p_img = 1
+    show_ranking()
 def show_ranking2():
-    screen.blit(intro_image, [0, 0])
-    default_font = pygame.font.SysFont('Gill Sans', 28)
-    f = read_csv(file_path+"score_type2.csv")
-    f.columns=['score','time']
-    f = f.sort_values(["score"],ascending=[False])
-    f.to_csv(file_path+"score_type2.txt",index=False,header=None,sep="\n")
-    f = open(file_path+"score_type2.txt")
-    for i in range(20) :
-        if i%2 == 0 :
-            scoring = f.readline()
-            scoring = scoring.rstrip()
-            draw_text("Score :"+scoring,default_font,screen,250,160+30+15*(i+1),white)
-        elif i%2 == 1 :
-            timing = f.readline()
-            timing = timing.rstrip()
-            draw_text(timing,default_font,screen,500,160+30+15*i,white)
-    rank = True
-    while rank:
-        for event in pygame.event.get():
-
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            largeText = pygame.font.SysFont('Creepster-Regular.ttf', 90)
-            TextSurf, TextRect = text_objects("RANKING",   largeText)
-            TextRect.center = ((size[0]/2),(size[1]/(4.5)))
-            screen.blit(TextSurf, TextRect)
-            
-            button("Menu",225,500,95,50,green,bright_green,game_intro)
-            button("Ranking",325,500,150,50,orange,bright_orange,select_ranking)
-            button("Quit",480,500,95,50,red,bright_red, quit_game)
-
-        pygame.display.update()
-
+    global p_img
+    p_img = 2
+    show_ranking()
 def show_ranking3():
+    global p_img
+    p_img = 3
+    show_ranking()
+def show_ranking4():
+    global p_img
+    p_img = 4
+    show_ranking()
+def show_ranking2P():
+    global p_img
+    p_img = 0
+    show_ranking()
+
+def show_ranking():
     screen.blit(intro_image, [0, 0])
     default_font = pygame.font.SysFont('Gill Sans', 28)
-    f = read_csv(file_path+"score_type3.csv")
-    f.columns=['score','time']
-    f = f.sort_values(["score"],ascending=[False])
-    f.to_csv(file_path+"score_type3.txt",index=False,header=None,sep="\n")
-    f = open(file_path+"score_type3.txt")
+    global p_img
+    if p_img == 1:
+        f = read_csv(file_path+"score_type1.csv")
+        f.columns=['score','time']
+        f = f.sort_values(["score"],ascending=[False])
+        f.to_csv(file_path+"score_type1.txt",index=False,header=None,sep="\n")
+        f = open(file_path+"score_type1.txt")
+    elif p_img == 2:
+        f = read_csv(file_path+"score_type2.csv")
+        f.columns=['score','time']
+        f = f.sort_values(["score"],ascending=[False])
+        f.to_csv(file_path+"score_type2.txt",index=False,header=None,sep="\n")
+        f = open(file_path+"score_type2.txt")
+    elif p_img == 3:
+        f = read_csv(file_path+"score_type3.csv")
+        f.columns=['score','time']
+        f = f.sort_values(["score"],ascending=[False])
+        f.to_csv(file_path+"score_type3.txt",index=False,header=None,sep="\n")
+        f = open(file_path+"score_type3.txt")
+    elif p_img == 4:
+        f = read_csv(file_path+"score_type4.csv")
+        f.columns=['score','time']
+        f = f.sort_values(["score"],ascending=[False])
+        f.to_csv(file_path+"score_type4.txt",index=False,header=None,sep="\n")
+        f = open(file_path+"score_type4.txt")
+    else:
+        f = read_csv(file_path+"score_2P.csv")
+        f.columns=['score','time']
+        f = f.sort_values(["score"],ascending=[False])
+        f.to_csv(file_path+"score_2P.txt",index=False,header=None,sep="\n")
+        f = open(file_path+"score_2P.txt")
+
     for i in range(20) :
-        if i%2 == 0 :
-            scoring = f.readline()
-            scoring = scoring.rstrip()
-            draw_text("Score :"+scoring,default_font,screen,250,160+30+15*(i+1),white)
-        elif i%2 == 1 :
-            timing = f.readline()
-            timing = timing.rstrip()
-            draw_text(timing,default_font,screen,500,160+30+15*i,white)
+            if i%2 == 0 :
+                scoring = f.readline()
+                scoring = scoring.rstrip()
+                draw_text("Score :"+scoring,default_font,screen,250,160+30+15*(i+1),white)
+            elif i%2 == 1 :
+                timing = f.readline()
+                timing = timing.rstrip()
+                draw_text(timing,default_font,screen,500,160+30+15*i,white)
+
     rank = True
     while rank:
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
             largeText = pygame.font.SysFont('Creepster-Regular.ttf', 90)
             TextSurf, TextRect = text_objects("RANKING",   largeText)
             TextRect.center = ((size[0]/2),(size[1]/(4.5)))
             screen.blit(TextSurf, TextRect)
-            
             button("Menu",225,500,95,50,green,bright_green,game_intro)
             button("Ranking",325,500,150,50,orange,bright_orange,select_ranking)
             button("Quit",480,500,95,50,red,bright_red, quit_game)
 
         pygame.display.update()
 
-def show_ranking4():
-    screen.blit(intro_image, [0, 0])
-    default_font = pygame.font.SysFont('Gill Sans', 28)
-    f = read_csv(file_path+"score_type4.csv")
-    f.columns=['score','time']
-    f = f.sort_values(["score"],ascending=[False])
-    f.to_csv(file_path+"score_type4.txt",index=False,header=None,sep="\n")
-    f = open(file_path+"score_type4.txt")
-    for i in range(20) :
-        if i%2 == 0 :
-            scoring = f.readline()
-            scoring = scoring.rstrip()
-            draw_text("Score :"+scoring,default_font,screen,250,160+30+15*(i+1),white)
-        elif i%2 == 1 :
-            timing = f.readline()
-            timing = timing.rstrip()
-            draw_text(timing,default_font,screen,500,160+30+15*i,white)
-    rank = True
-    while rank:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            largeText = pygame.font.SysFont('Gill Sans', 90)
-            TextSurf, TextRect = text_objects("RANKING",   largeText)
-            TextRect.center = ((size[0]/2),(size[1]/(4.5)))
-            screen.blit(TextSurf, TextRect)
-            
-            button("Menu",225,500,95,50,green,bright_green,game_intro)
-            button("Ranking",325,500,150,50,orange,bright_orange,select_ranking)
-            button("Quit",480,500,95,50,red,bright_red, quit_game)
-        pygame.display.update()
-
-def show_ranking2P():
-    screen.blit(intro_image, [0, 0])
-    default_font = pygame.font.SysFont('Gill Sans', 28)
-    f = read_csv(file_path+"score_2P.csv")
-    f.columns=['score','time']
-    f = f.sort_values(["score"],ascending=[False])
-    f.to_csv(file_path+"score_2P.txt",index=False,header=None,sep="\n")
-    f = open(file_path+"score_2P.txt")
-    for i in range(20) :
-        if i%2 == 0 :
-            scoring = f.readline()
-            scoring = scoring.rstrip()
-            draw_text("Score :"+scoring,default_font,screen,250,160+30+15*(i+1),white)
-        elif i%2 == 1 :
-            timing = f.readline()
-            timing = timing.rstrip()
-            draw_text(timing,default_font,screen,500,160+30+15*i,white)
-    rank = True
-    while rank:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            largeText = pygame.font.SysFont('Gill Sans', 90)
-            TextSurf, TextRect = text_objects("RANKING",   largeText)
-            TextRect.center = ((size[0]/2),(size[1]/(4.5)))
-            screen.blit(TextSurf, TextRect)
-            
-            button("Menu",225,500,95,50,green,bright_green,game_intro)
-            button("Ranking",325,500,150,50,orange,bright_orange,select_ranking)
-            button("Quit",480,500,95,50,red,bright_red, quit_game)
-        pygame.display.update()
-
+## 게임 종료
 def quit_game():
     pygame.quit()
     sys.exit()
-    
-def button_img(img,x,y,w,h,action=None):
-    mouse = pygame.mouse.get_pos()
-    click = pygame.mouse.get_pressed()
-    
-    screen.blit(img,[x,y])
 
-    if x+w > mouse[0] > x and y+h > mouse[1] > y:
-        if click[0] == 1 and action != None:
-           action()
-
-def button(msg,x,y,w,h,ic,ac,action=None):
-    mouse = pygame.mouse.get_pos()
-    click = pygame.mouse.get_pressed()
-
-    pygame.draw.rect(screen, ac,(x,y,w,h))
-
-    if x+w > mouse[0] > x and y+h > mouse[1] > y:
-        if click[0] == 1 and action != None:
-           action()
-
-    smallText = pygame.font.SysFont("Gill Sans MT", 40)
-    textSurf, textRect = text_objects(msg, smallText)
-    textRect.center = ((x+(w/2)), (y+(h/2)))
-    screen.blit(textSurf, textRect)
-
-def help_ex():
-    global v
-    screen.blit(menual, (0,0))
-    intro = True
-    while intro:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYUP:
-            
-                if event.key == pygame.K_1:
-                    v = v - 0.002
-                intro_sound.set_volume(v)
-                if v < 0 :
-                    v = 0
-                if event.key == pygame.K_2:
-                    v = v + 0.002
-                intro_sound.set_volume(v)
-                if v > 1 :
-                    v = 1
-
-            button_img(arrow,705,25,70,70,game_intro)
-            
-        pygame.display.update()
-
-
-
-# 게임 매뉴 선택 화면
+## 게임 매뉴 선택
 def game_intro():
-    
-    global v
-    v = 0.01
+    global v, whilegame, explosion_sound, item_sound, choose
+    v = 0.4
     pygame.mixer.pause()
     pygame.mixer.music.stop()
     screen.blit(intro_image, [0, 0])
+    whilegame = pygame.mixer.Sound(file_path+"whilegame.wav")  
+    explosion_sound = pygame.mixer.Sound(file_path+"explosion.wav")
+    item_sound = pygame.mixer.Sound(file_path+"item.wav")
     intro_sound = pygame.mixer.Sound(file_path+"intro.wav")
     intro_sound.set_volume(v)
-    intro_sound.play()  
-
-
-    global choose
+    intro_sound.play()
     choose = 1
 
     intro = True
@@ -1367,18 +1236,17 @@ def game_intro():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYUP:
-            
                 if event.key == pygame.K_COMMA:
-                    v = v - 0.002
+                    v = v - 0.005
+                    if v < 0 :
+                        v = 0
                 intro_sound.set_volume(v)
-                if v < 0 :
-                    v = 0
                 if event.key == pygame.K_PERIOD:
-                    v = v + 0.002
+                    v = v + 0.005
+                    if v > 1 :
+                        v = 1
                 intro_sound.set_volume(v)
-                if v > 1 :
-                    v = 1
-
+                
             largeText = pygame.font.SysFont('Creepster-Regular.ttf', 100)
             TextSurf, TextRect = text_objects("Select Menu",   largeText)
             TextRect.center = ((size[0]/2),(size[1]/4))
@@ -1396,7 +1264,6 @@ def game_intro():
 
 # 게임 시작전 화면    
 def main_screen():
-    
     screen.fill((0,0,0))
     messages = ["Let's Play!",
                 "Ready?",
