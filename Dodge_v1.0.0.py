@@ -44,7 +44,6 @@ file_path = "/home/wj/OSSP/Dodge-game/"
 #file_path = "/home/dohee/master/Dodge-game/"
 #file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 
-
 ## 이미지
 # 배경, 인트로, button
 background_image = pygame.image.load(file_path+"background.jpg").convert()
