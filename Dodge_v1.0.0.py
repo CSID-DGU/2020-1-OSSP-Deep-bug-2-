@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-
-
 #-*- coding: utf-8 -*-
 import pygame
 from random import randint
@@ -39,8 +37,8 @@ pygame.key.set_repeat(1,1)
 
 ## 파일 경로 지정
 #file_path = "C:/Users/user_pc/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
-file_path = "/home/wj/OSSP/Dodge-game/"
-#file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
+#file_path = "/home/wj/OSSP/Dodge-game/"
+file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 #file_path = "/home/dohee/master/Dodge-game/"
 #file_path = "C:/Users/82109/Documents/GitHub/2020-1-OSSP1-Deepbug-2/Dodge-game/"
 
@@ -86,10 +84,6 @@ fireball_g_big = pygame.image.load(file_path+"meteor_g_big.png")
 
 # 도움말 이미지
 menual = pygame.image.load(file_path+"help.png")
-
-# 음소거 버튼 이미지
-mute = pygame.image.load(file_path+"mute.png")
-play_sound = pygame.image.load(file_path+"play.png")
 
 # 게임 내에 text를 넣을때 쓰는 함수
 def draw_text(text,font,surface,x,y,main_color) :
@@ -138,12 +132,6 @@ def paused():
         pygame.display.update()
         clock.tick(10)
 
-# 음소거 함수
-def muted() :
-    pygame.mixer.pause()
-def sound_play() :
-    pygame.mixer.unpause()
-
 # 도움말 함수
 def help_ex():
     global v
@@ -155,14 +143,14 @@ def help_ex():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_1:
+                if event.key == pygame.K_COMMA:
                     v = v - 0.005
                     if v < 0 :
                         v = 0
                 explosion_sound.set_volume(v)
                 item_sound.set_volume(v)
                 whilegame.set_volume(v)
-                if event.key == pygame.K_2:
+                if event.key == pygame.K_PERIOD:
                     v = v + 0.005
                     if v > 1 :
                         v = 1
@@ -1256,8 +1244,6 @@ def game_intro():
             button("2 Play",300,300,200,50,green,bright_green,select_type2)
             button("Ranking",300,370,200,50,orange,bright_orange,select_ranking)
             button("Quit",300,440,200,50,red,bright_red, quit_game)
-            button_img(mute,50,18,40,40,muted)
-            button_img(play_sound,17,20,40,40,sound_play)
 
         pygame.display.update()
 
@@ -1351,6 +1337,3 @@ def dead():
 
 # 프로그램 시작
 game_intro()
-
-
-
